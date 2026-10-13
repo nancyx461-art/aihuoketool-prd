@@ -88,6 +88,23 @@ python make_video.py --mode talking      # 临时切换成口播
 python make_video.py --from-script output/某天/script.json   # 改完脚本重新剪
 ```
 
+## 省钱做法：素材库（推荐）
+
+每天都按镜头调用 AI 生成视频会很贵。职场日常的镜头其实高度重复（工位打字、趴桌叹气、捂脸崩溃、电梯、地铁、下班路上、喝奶茶），所以可以**一次性做好一套通用镜头，之后每天复用**：
+
+```bash
+python make_video.py --library-plan
+```
+
+运行后会生成 `output/library_plan.md`，里面有 24 个常用镜头的建议文件名和提示词。用即梦/可灵每天的免费额度，花几天时间慢慢生成这些镜头，然后按建议文件名（文件名就是标签，比如 `工位_打字_认真.mp4`）放进 `assets/library/`。如果愿意一次性付费，也可以运行 `python make_video.py --build-library` 自动生成缺的镜头。
+
+之后每天出片时：
+
+- 每句台词会按场景、动作、情绪自动匹配素材库里最贴合的镜头，并尽量不在同一条视频里重复使用；
+- 配置了大模型时，脚本会尽量写成能用上素材库的场景；
+- 匹配不到的镜头才走自动生成。用 `media.max_generated_per_video` 可以限制每条视频最多自动生成几个镜头（优先生成开头钩子和金句）；剩下的用本地动画兜底；
+- 素材库里也可以放图片，图片镜头会缓慢推拉，成本只有视频的零头。
+
 ## 剪映
 
 - 工具会自动找本机的剪映草稿目录（Windows：`%LOCALAPPDATA%\JianyingPro\User Data\Projects\com.lveditor.draft`；macOS：`~/Movies/JianyingPro/...`），生成后**打开剪映首页就能看到当天的草稿**。找不到时，可在 `config.yaml` 的 `jianying.draft_folder` 里手动填写。

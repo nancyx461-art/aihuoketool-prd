@@ -8,6 +8,7 @@
   python make_video.py --from-script output/xxx/script.json   # 用你改过的脚本重新剪
   python make_video.py --mark             # 输出带网格的 IP 图，帮你量嘴巴/眼睛坐标
   python make_video.py --mode talking     # 临时切换口播模式（默认读 config.yaml 的 mode）
+  python make_video.py --library-plan     # 输出通用镜头素材库清单（做一次，每天复用）
 """
 
 import argparse
@@ -22,7 +23,7 @@ from PIL import Image, ImageDraw
 
 from petvideo import demo_pet
 from petvideo.animate import ImageAnimator, LineTimeline, ShotAnimator
-from petvideo.media import prepare_shots, write_shot_list
+from petvideo.media import build_library, prepare_shots, write_library_plan, write_shot_list
 from petvideo.config import ROOT, load_config, resolve
 from petvideo.render import Overlay, render
 from petvideo.scripts import generate_script, record_history, script_to_markdown
@@ -149,6 +150,8 @@ def main():
     ap.add_argument("--script-only", action="store_true")
     ap.add_argument("--from-script", help="用已有/手改过的 script.json 剪辑")
     ap.add_argument("--mark", action="store_true", help="输出带坐标网格的 IP 图")
+    ap.add_argument("--library-plan", action="store_true", help="输出通用镜头素材库清单和提示词")
+    ap.add_argument("--build-library", action="store_true", help="用火山方舟一次性生成素材库里缺的镜头")
     args = ap.parse_args()
 
     cfg = load_config(args.config)
@@ -156,6 +159,14 @@ def main():
         cfg["mode"] = args.mode
     if args.mark:
         return mark_grid(cfg)
+    if args.library_plan or args.build_library:
+        out = ROOT / "output" / "library_plan.md"
+        out.parent.mkdir(exist_ok=True)
+        write_library_plan(cfg["pet"], cfg.get("media", {}), out)
+        print(f"素材库清单：{out}")
+        if args.build_library:
+            build_library(cfg["pet"], cfg.get("media", {}))
+        return
     if not cfg["llm"].get("api_key") and not args.from_script:
         print("[提示] 没有设置 LLM_API_KEY，使用内置职场脚本库。设置后每天都会由大模型写新脚本。")
 

@@ -132,6 +132,12 @@ def generate_script(cfg, theme=None, date=None):
         theme = theme or random.Random(date.toordinal()).choice(themes)
         recent = "、".join(h["title"] for h in _load_history()[-30:]) or "无"
         form, extra, line_format = FORMS[mode]
+        if mode == "story":
+            from .media import library_items
+            items = library_items(cfg.get("media", {}))
+            if items:
+                extra += ("11. 我已经有这些现成镜头（用标签描述），请尽量让分镜的场景和动作用上这些标签里的词，"
+                          "这样可以直接复用素材：" + "；".join("/".join(tags) for _, tags in items[:80]) + "\n")
         prompt = PROMPT.format(
             form=form, extra=extra, line_format=line_format,
             name=pet["name"], species=pet.get("species", "宠物"), appearance=pet.get("appearance", ""),

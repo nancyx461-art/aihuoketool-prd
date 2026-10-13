@@ -62,10 +62,13 @@ llm:
 # ============ 剧情模式：分镜素材 ============
 # 每个镜头的素材按这个顺序找：
 #   1. 当天输出目录 shots/ 里你自己放的 shot_01.mp4 / shot_02.png ……（可以用 shots.md 里的提示词去即梦/可灵生成）
-#   2. provider: ark 时，调用火山方舟 Seedance，用 IP 参考图 + 分镜提示词自动生成视频（需要环境变量 ARK_API_KEY）
-#   3. 都没有时，用本地宠物动画兜底（保证流程能跑完）
+#   2. 素材库 library 里按文件名标签匹配的现成镜头（一次做好、每天复用，最省钱）
+#   3. provider: ark 时，调用火山方舟 Seedance，用 IP 参考图 + 分镜提示词自动生成视频（需要环境变量 ARK_API_KEY）
+#   4. 都没有时，用本地宠物动画兜底（保证流程能跑完）
 media:
+  library: assets/library # 素材库目录，文件名即标签：工位_打字_认真.mp4、电梯_按按钮_平静.png
   provider: none          # none / ark
+  max_generated_per_video: null       # 每条视频最多自动生成几个镜头（优先开头钩子和金句），null 不限
   model: doubao-seedance-2-0-260128   # 也可用环境变量 ARK_VIDEO_MODEL 覆盖
   image_role: reference_image         # 模型不支持参考图时改成 first_frame（以 IP 图作为首帧）
   resolution: 720p
