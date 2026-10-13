@@ -1,0 +1,83 @@
+# ============ 宠物 IP 设定 ============
+pet:
+  name: 团团
+  species: 橘猫
+  # 人设会写进提示词，决定脚本语气
+  persona: >-
+    一只在互联网大厂上班三年的橘猫，工位在空调出风口旁边，
+    嘴上爱吐槽、心里很温柔，最擅长用一句大实话戳中打工人，
+    再用一句软话把人接住。
+  catchphrase: 喵的，今天也辛苦了。
+  # 你的宠物 IP 图片（建议竖图、背景干净、宠物正脸）。
+  # 留空或文件不存在时，会自动生成一张示例橘猫图用来跑通流程。
+  image: assets/pet.png
+
+  # 可选：嘴巴和眼睛在图片中的位置（相对比例 0~1：中心x, 中心y, 宽, 高）。
+  # 配置后宠物会"张嘴说话"和"眨眼"；不配置也能动（呼吸、点头、弹跳、摇摆）。
+  # 运行 `python make_video.py --mark` 可以输出一张带网格的图帮你量坐标。
+  mouth: null        # 例如 [0.50, 0.62, 0.16, 0.06]
+  eyes: []           # 例如 [[0.40, 0.48, 0.09, 0.06], [0.60, 0.48, 0.09, 0.06]]
+  mouth_color: "#3a1f1f"
+
+  # 可选：用即梦/可灵/Runway 等"图生视频"工具，提前把 IP 做成几段动作循环视频，
+  # 之后每天的视频都会复用这些片段，动作会比本地动画自然很多。
+  # 键是情绪（calm/happy/sad/shock/angry），值是视频路径，至少给一个 calm。
+  motion_clips: {}
+  # motion_clips:
+  #   calm: assets/clips/calm.mp4
+  #   happy: assets/clips/happy.mp4
+
+# ============ 脚本生成（大模型） ============
+# 兼容 OpenAI 接口的任意模型：DeepSeek / 豆包(火山方舟) / Kimi / 通义 / OpenAI。
+# 密钥只从环境变量读取：LLM_API_KEY（必填）、LLM_BASE_URL、LLM_MODEL（可覆盖下面的默认值）。
+# 没有配置密钥时，会从内置的职场选题库里按日期轮换脚本，保证每天都有产出。
+llm:
+  base_url: https://api.deepseek.com
+  model: deepseek-chat
+  temperature: 1.0
+  # 想让它围绕的方向，每天随机挑一个；也可以用 --topic 临时指定
+  themes:
+    - 周一上班的精神状态
+    - 领导画饼和打工人的清醒
+    - 下班前五分钟来的需求
+    - 微信"收到"背后的千言万语
+    - 改了八版又回到第一版的方案
+    - 开不完的会
+    - 同事抢功、背锅
+    - 年终总结和绩效焦虑
+    - 想辞职又不敢辞职
+    - 带薪摸鱼的艺术
+    - 被说"年轻人要多吃苦"
+    - 工作中犯错后的自责
+    - 加班到深夜的地铁
+    - 周末被工作消息打扰
+    - 工资到账五分钟就没了
+
+# ============ 配音 ============
+tts:
+  engine: edge          # edge（免费、音色好，需联网） / espeak（离线兜底，机械音）
+  voice: zh-CN-XiaoyiNeural   # 活泼女声；也可试 zh-CN-YunxiNeural（少年感男声）
+  rate: "+8%"
+  pitch: "+12Hz"
+  gap: 0.22             # 句与句之间停顿（秒）
+
+# ============ 画面 ============
+video:
+  width: 1080
+  height: 1920
+  fps: 30
+  background: blur      # blur（用宠物图模糊做背景） / 纯色如 "#f6e7d0"
+  show_title: true
+  subtitle_font: null   # 留空自动找系统中文字体，也可填 .ttf/.ttc 路径
+  bgm: null             # 可选背景音乐路径
+  bgm_volume: 0.12
+
+# ============ 输出 ============
+output_dir: output
+jianying:
+  enabled: true
+  # 剪映草稿目录，留空自动查找：
+  #   Windows: C:/Users/<你>/AppData/Local/JianyingPro/User Data/Projects/com.lveditor.draft
+  #   macOS:   ~/Movies/JianyingPro/User Data/Projects/com.lveditor.draft
+  # 找不到时草稿会放在当天的输出文件夹里。
+  draft_folder: null
