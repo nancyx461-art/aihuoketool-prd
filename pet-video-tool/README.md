@@ -1,8 +1,23 @@
-# 宠物 IP 职场口播视频 · 自动生成工具
+# 宠物 IP 职场短视频 · 自动生成工具
 
-每天一条：**大模型写职场脚本 → 宠物配音 → 宠物图片动起来（说话、眨眼、按情绪做动作）→ 自动加标题和字幕 → 输出成片 MP4 + 剪映草稿**。
+每天一条：**大模型写职场脚本 → 宠物配音 → 画面（分镜视频或会动的 IP 图）→ 自动加标题和字幕 → 输出成片 MP4 + 剪映草稿**。
 
 内容定位：宠物 IP 用第一人称讲职场梗、职场小故事，透露一点道理，重点是让打工人有共鸣、被理解、被安慰。
+
+## 两种视频形式（`config.yaml` 里的 `mode`）
+
+| 形式 | 画面 | 适合 |
+|---|---|---|
+| `story` 剧情 vlog（默认） | 每句旁白一个分镜：宠物像人一样在工位、电梯、地铁、街头生活，场景随故事切换 | 对标「小斗下班啦」这类写实 AI 萌宠账号 |
+| `talking` 口播 | 同一张 IP 图全程对镜头说话，会张嘴、眨眼、按情绪做动作 | 零成本、日更压力小、卡通风格 IP |
+
+剧情模式下，每个镜头的素材按这个顺序找：
+
+1. 你放进当天 `shots/` 文件夹的 `shot_01.mp4`、`shot_02.png`……（可以复制 `shots.md` 里的提示词，去即梦或可灵手动生成）；
+2. 设置了 `media.provider: ark` 和环境变量 `ARK_API_KEY` 时，调用火山方舟 Seedance，用你的 IP 图做参考图，自动生成 5 秒竖屏视频；
+3. 都没有时，用 IP 图做本地动画兜底，保证一定能出片。
+
+想换掉某个镜头，只需把文件替换掉，再运行 `python make_video.py --from-script output/某天/script.json`，工具会用新素材重新合成。
 
 ## 每天会产出什么
 
@@ -12,7 +27,8 @@
 |---|---|
 | `final.mp4` | 成片（1080×1920，带标题、字幕、配音），可直接发抖音/视频号/小红书 |
 | `cover.jpg` | 封面（取"金句"那一帧） |
-| `script.md` / `script.json` | 脚本、发布文案、话题标签；改 `script.json` 后可重新剪 |
+| `script.md` / `script.json` | 脚本、分镜、发布文案、话题标签；改 `script.json` 后可重新剪 |
+| `shots.md`、`shots/` | 剧情模式的分镜表、每个镜头的提示词和素材 |
 | `clean_no_subtitles.mp4`、`voice.wav`、`subtitles.srt` | 无字幕画面、配音、字幕，方便二次剪辑 |
 | 剪映草稿 | 视频轨 + 配音轨 + 标题 + 字幕轨，打开剪映就能继续精修和导出 |
 
@@ -25,11 +41,11 @@
 pip install -r requirements.txt
 ```
 
-## 三步用起来
+## 用起来
 
 **1. 放上你的宠物 IP 图**：保存为 `assets/pet.png`。效果最好的是**抠好图的透明背景 PNG**（宠物会整体弹跳、摇摆、挤压拉伸）；普通图片也可以，动作会收敛一些。然后在 `config.yaml` 里改名字、人设和口头禅。
 
-**2. 让宠物张嘴、眨眼（推荐）**：
+**2. 让宠物张嘴、眨眼（口播模式和兜底动画用）**：
 
 ```bash
 python make_video.py --mark
@@ -42,7 +58,7 @@ mouth: [0.50, 0.62, 0.16, 0.06]                          # 中心x, 中心y, 宽
 eyes: [[0.40, 0.48, 0.09, 0.06], [0.60, 0.48, 0.09, 0.06]]
 ```
 
-**3. 配置大模型，让它每天写新脚本**（不配也能用，会轮换内置的 7 条职场脚本）：
+**3. 配置大模型，让它每天写新脚本**（不配也能用，会轮换内置脚本：剧情模式 3 条、口播模式 7 条）：
 
 ```bash
 # macOS / Linux
@@ -53,13 +69,22 @@ setx LLM_API_KEY 你的密钥
 
 默认用 DeepSeek。换豆包、Kimi、通义千问、OpenAI 等兼容 OpenAI 接口的模型，再设置 `LLM_BASE_URL` 和 `LLM_MODEL` 即可。可以在 `config.yaml` 的 `llm.themes` 里维护选题方向，工具会自动避开最近发过的标题。
 
+**4. 剧情模式自动生成分镜视频（可选）**：在 [火山方舟控制台](https://console.volcengine.com/ark) 开通 Seedance 视频生成并创建 API Key，然后：
+
+```bash
+export ARK_API_KEY=你的方舟密钥        # Windows：setx ARK_API_KEY 你的方舟密钥
+```
+
+接着把 `config.yaml` 里的 `media.provider` 改成 `ark`，并在 `pet.appearance` 里写清楚 IP 的固定外形（毛色、配饰，比如"背一个牛仔小挎包"）。这段描述会写进每个镜头的提示词，保证镜头之间是同一只宠物。还可以在 `pet.reference_images` 里放几张不同角度的 IP 图，形象会更稳定。视频生成按条计费，一条视频大约 7~10 个镜头，费用以方舟控制台的价格为准。
+
 然后运行：
 
 ```bash
 python make_video.py                     # 生成今天的视频
 python make_video.py --topic 开不完的会    # 指定主题
 python make_video.py --days 7            # 一次做好一周的
-python make_video.py --script-only       # 只要脚本
+python make_video.py --script-only       # 只要脚本和分镜提示词
+python make_video.py --mode talking      # 临时切换成口播
 python make_video.py --from-script output/某天/script.json   # 改完脚本重新剪
 ```
 
@@ -70,7 +95,7 @@ python make_video.py --from-script output/某天/script.json   # 改完脚本重
 - 草稿格式基于开源项目 [pyJianYingDraft](https://github.com/GuanYixuan/pyJianYingDraft)，剪映 5.x 兼容最好；较新版本的剪映如果打不开草稿，直接用 `final.mp4` 即可，它不依赖剪映。
 - 在剪映里可以继续换"文本朗读"音色、加贴纸和音效、套字幕样式。
 
-## 让宠物动得更自然：AI 动作片段（可选）
+## 口播模式：用 AI 动作片段让宠物动得更自然（可选）
 
 本地动画的原理是让图片做呼吸、点头、弹跳、张嘴、眨眼和情绪动作，零成本，适合卡通风格的 IP。想要更真实的动作（转头、挥爪、捂脸），可以用 **即梦 / 可灵 / Runway** 的"图生视频"，拿你的 IP 图做几段 5~10 秒的动作视频（最好首尾衔接，方便循环），然后在 `config.yaml` 里填写：
 

@@ -127,39 +127,41 @@ class ImageAnimator:
         return math.sin(p * math.pi) if 0 <= p <= 1 else 0.0
 
     def frames(self, timeline, env, n_frames):
-        W, H, fps = self.W, self.H, self.fps
         for f in range(n_frames):
-            t = f / fps
-            idx, speaking, since = timeline.at(t)
-            line = timeline.lines[idx]
-            bounce, sway, sink, shake, size = EMOTION_STYLE[line["emotion"]]
-            e = float(env[min(f, len(env) - 1)]) if speaking else 0.0
+            yield self.frame_at(f, timeline, env)
 
-            target = np.array([bounce, sway, sink, shake, size])
-            self.state += (target - self.state) * 0.12
-            bounce, sway, sink, shake, size = self.state
+    def frame_at(self, f, timeline, env):
+        t = f / self.fps
+        idx, speaking, since = timeline.at(t)
+        line = timeline.lines[idx]
+        bounce, sway, sink, shake, size = EMOTION_STYLE[line["emotion"]]
+        e = float(env[min(f, len(env) - 1)]) if speaking else 0.0
 
-            pop = 0.0
-            if line["emotion"] == "shock" and since < 0.45:
-                pop = math.sin(since / 0.45 * math.pi)
-            push = 0.04 * min(1.0, since / 2.5) if line.get("highlight") else 0.0
+        target = np.array([bounce, sway, sink, shake, size])
+        self.state += (target - self.state) * 0.12
+        bounce, sway, sink, shake, size = self.state
 
-            breath = math.sin(2 * math.pi * t / 3.2)
-            sy = size * (1 + 0.012 * breath + 0.045 * e * bounce + 0.06 * pop) + push
-            sx = size * (1 - 0.006 * breath - 0.02 * e * bounce + 0.03 * pop) + push
-            rot = sway * math.sin(2 * math.pi * t / 3.6) + (2.5 * e * math.sin(2 * math.pi * t * 1.3) if line["emotion"] == "happy" else 0)
-            dy = sink - 26 * e * bounce - 45 * pop
-            dx = 0.0
-            if shake:
-                decay = 1.0 if line["emotion"] == "angry" else max(0.0, 1 - since / 0.6)
-                dx = shake * decay * math.sin(t * 90)
-                dy += shake * 0.5 * decay * math.sin(t * 70)
-            if not self.cutout:
-                rot *= 0.25
-                sx = sy = 1 + (sx + sy - 2) * 0.5
+        pop = 0.0
+        if line["emotion"] == "shock" and since < 0.45:
+            pop = math.sin(since / 0.45 * math.pi)
+        push = 0.04 * min(1.0, since / 2.5) if line.get("highlight") else 0.0
 
-            pet = self._face(e, self._blink(t))
-            yield self._place(pet, sx, sy, rot, dx, dy)
+        breath = math.sin(2 * math.pi * t / 3.2)
+        sy = size * (1 + 0.012 * breath + 0.045 * e * bounce + 0.06 * pop) + push
+        sx = size * (1 - 0.006 * breath - 0.02 * e * bounce + 0.03 * pop) + push
+        rot = sway * math.sin(2 * math.pi * t / 3.6) + (2.5 * e * math.sin(2 * math.pi * t * 1.3) if line["emotion"] == "happy" else 0)
+        dy = sink - 26 * e * bounce - 45 * pop
+        dx = 0.0
+        if shake:
+            decay = 1.0 if line["emotion"] == "angry" else max(0.0, 1 - since / 0.6)
+            dx = shake * decay * math.sin(t * 90)
+            dy += shake * 0.5 * decay * math.sin(t * 70)
+        if not self.cutout:
+            rot *= 0.25
+            sx = sy = 1 + (sx + sy - 2) * 0.5
+
+        pet = self._face(e, self._blink(t))
+        return self._place(pet, sx, sy, rot, dx, dy)
 
     def _place(self, pet, sx, sy, rot, dx, dy):
         """以宠物底部中心为锚点做缩放（挤压拉伸）+ 旋转 + 位移。"""
@@ -176,48 +178,68 @@ class ImageAnimator:
         return frame
 
 
-class ClipAnimator:
-    """复用提前用即梦/可灵等生成的动作视频片段，按每句台词的情绪切换。"""
+VIDEO_EXT = {".mp4", ".mov", ".m4v", ".webm", ".mkv"}
 
-    def __init__(self, clips, W, H, fps):
-        self.clips, self.W, self.H, self.fps = clips, W, H, fps
 
-    def _stream(self, path, seconds):
-        W, H = self.W, self.H
-        vf = f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={self.fps}"
-        proc = subprocess.Popen(
-            ["ffmpeg", "-v", "error", "-stream_loop", "-1", "-i", str(path), "-t", f"{seconds:.3f}",
-             "-vf", vf, "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
-            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
-        size = W * H * 3
-        try:
-            while True:
-                buf = proc.stdout.read(size)
-                if len(buf) < size:
-                    break
-                yield Image.frombuffer("RGB", (W, H), buf, "raw", "RGB", 0, 1)
-        finally:
-            proc.kill()
-            proc.wait()
+def _stream_video(path, seconds, W, H, fps):
+    vf = f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},fps={fps}"
+    proc = subprocess.Popen(
+        ["ffmpeg", "-v", "error", "-stream_loop", "-1", "-i", str(path), "-t", f"{seconds:.3f}",
+         "-vf", vf, "-an", "-f", "rawvideo", "-pix_fmt", "rgb24", "-"],
+        stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    size = W * H * 3
+    try:
+        while True:
+            buf = proc.stdout.read(size)
+            if len(buf) < size:
+                break
+            yield Image.frombuffer("RGB", (W, H), buf, "raw", "RGB", 0, 1)
+    finally:
+        proc.kill()
+        proc.wait()
+
+
+def _ken_burns(path, count, W, H, zoom_in):
+    img = Image.open(path).convert("RGB")
+    s = max(W / img.width, H / img.height) * 1.1
+    img = img.resize((int(img.width * s) + 1, int(img.height * s) + 1), Image.LANCZOS)
+    for k in range(count):
+        p = k / max(1, count - 1)
+        z = 1 + 0.08 * (p if zoom_in else 1 - p)
+        w, h = img.width / z, img.height / z
+        x0, y0 = (img.width - w) / 2, (img.height - h) / 2
+        yield img.resize((W, H), Image.BILINEAR, box=(x0, y0, x0 + w, y0 + h))
+
+
+class ShotAnimator:
+    """逐句拼接镜头：每句台词一个素材（视频循环/裁切、图片缓推、没有素材时用本地宠物动画）。"""
+
+    def __init__(self, sources, W, H, fps, fallback=None):
+        self.sources, self.W, self.H, self.fps, self.fallback = sources, W, H, fps, fallback
 
     def frames(self, timeline, env, n_frames):
-        bounds = [s for s, _ in timeline.spans] + [n_frames / self.fps]
-        bounds[0] = 0.0
+        starts = [0.0] + [s for s, _ in timeline.spans[1:]]
         produced = 0
-        for i, line in enumerate(timeline.lines):
-            end_frame = n_frames if i == len(timeline.lines) - 1 else round(bounds[i + 1] * self.fps)
-            count = end_frame - produced
+        for i, src in enumerate(self.sources):
+            end = n_frames if i == len(self.sources) - 1 else round(starts[i + 1] * self.fps)
+            count = end - produced
             if count <= 0:
                 continue
-            clip = self.clips.get(line["emotion"]) or self.clips.get("calm") or next(iter(self.clips.values()))
+            if src is None:
+                gen = (self.fallback.frame_at(f, timeline, env) for f in range(produced, end))
+            elif src.suffix.lower() in VIDEO_EXT:
+                gen = _stream_video(src, count / self.fps + 0.2, self.W, self.H, self.fps)
+            else:
+                gen = _ken_burns(src, count, self.W, self.H, zoom_in=i % 2 == 0)
             last = None
-            for frame in self._stream(clip, count / self.fps + 0.2):
+            for frame in gen:
                 if count <= 0:
                     break
                 last = frame
                 produced += 1
                 count -= 1
                 yield frame
+            gen.close()
             while count > 0 and last is not None:
                 produced += 1
                 count -= 1

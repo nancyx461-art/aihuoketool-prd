@@ -6,15 +6,17 @@ import re
 import urllib.request
 
 from .config import ROOT
-from .script_bank import SCRIPTS
+from .script_bank import SCRIPTS, STORY_SCRIPTS
 
 EMOTIONS = ("calm", "happy", "sad", "shock", "angry")
 HISTORY_FILE = ROOT / "output" / "history.json"
 
-PROMPT = """你是一个短视频编剧，为宠物 IP 写一条 30~50 秒的竖屏口播脚本，由宠物用第一人称对着镜头说。
+PROMPT = """你是一个短视频编剧，为宠物 IP 写一条 30~50 秒的竖屏短视频脚本。
+{form}
 
 【宠物 IP】
 名字：{name}（{species}）
+外形：{appearance}
 人设：{persona}
 口头禅：{catchphrase}
 
@@ -29,10 +31,26 @@ PROMPT = """你是一个短视频编剧，为宠物 IP 写一条 30~50 秒的竖
 5. 每句标注宠物的情绪 emotion，只能是：calm / happy / sad / shock / angry。
 6. 把最能戳中人、透露道理的那一句标记 "highlight": true（只标一句）。
 7. 不要和这些已经发过的标题重复：{recent}
-
+{extra}
 【只输出 JSON，不要任何解释】格式：
-{{"title": "12字以内的封面标题", "theme": "{theme}", "lines": [{{"text": "...", "emotion": "calm"}}, ...], "caption": "发布时的一句话文案", "tags": ["职场", "..."]}}
+{{"title": "12字以内的封面标题", "theme": "{theme}", "lines": [{line_format}, ...], "caption": "发布时的一句话文案", "tags": ["职场", "..."]}}
 """
+
+FORMS = {
+    "talking": ("形式：口播。宠物用第一人称对着镜头说话，全程同一个画面。", "",
+                '{"text": "...", "emotion": "calm"}'),
+    "story": (
+        "形式：剧情 vlog。宠物像人一样上班、生活，用第一人称旁白讲自己今天的小故事，"
+        "每句台词对应一个分镜镜头，画面跟着故事换场景。",
+        """8. 每句台词配一个分镜：scene（具体的现实场景，如写字楼电梯、工位、地铁站、雨夜街头、出租屋厨房），
+   action（宠物在画面里做的一个具体动作，要和台词呼应，可爱、拟人，比如站起来按电梯、双爪捧着奶茶），
+   camera（镜头：特写/中景/全景，推/拉/跟拍/固定）。
+9. 画面要写实、温暖、有生活感；画面里可以有人类同事，但只拍身体或背影，不露正脸。
+10. 相邻镜头场景要有连贯的故事线（比如：出门→通勤→工位→下班），不要每句都跳到毫不相干的地方。
+""",
+        '{"text": "...", "emotion": "calm", "scene": "...", "action": "...", "camera": "..."}',
+    ),
+}
 
 
 def _load_history():
@@ -63,6 +81,7 @@ def _normalize(script, pet):
             "text": text,
             "emotion": emotion if emotion in EMOTIONS else "calm",
             "highlight": bool(line.get("highlight")),
+            **{k: str(line[k]).strip() for k in ("scene", "action", "camera") if line.get(k)},
         })
     if not lines:
         raise ValueError("脚本没有任何台词")
@@ -91,13 +110,14 @@ def _call_llm(llm, prompt):
     return json.loads(match.group(0) if match else content)
 
 
-def _from_bank(theme, date):
+def _from_bank(theme, date, mode):
+    bank = STORY_SCRIPTS if mode == "story" else SCRIPTS
     used = {h["title"] for h in _load_history()}
     if theme:
-        for s in SCRIPTS:
+        for s in bank:
             if theme in s["theme"] or s["theme"] in theme:
                 return copy.deepcopy(s)
-    fresh = [s for s in SCRIPTS if s["title"] not in used] or SCRIPTS
+    fresh = [s for s in bank if s["title"] not in used] or bank
     return copy.deepcopy(fresh[date.toordinal() % len(fresh)])
 
 
@@ -105,14 +125,17 @@ def generate_script(cfg, theme=None, date=None):
     """返回 (script, source)。有 LLM_API_KEY 时调用大模型，否则使用内置脚本库。"""
     date = date or dt.date.today()
     pet, llm = cfg["pet"], cfg["llm"]
+    mode = cfg.get("mode", "talking")
 
     if llm.get("api_key"):
         themes = llm.get("themes") or ["打工人的日常"]
         theme = theme or random.Random(date.toordinal()).choice(themes)
         recent = "、".join(h["title"] for h in _load_history()[-30:]) or "无"
+        form, extra, line_format = FORMS[mode]
         prompt = PROMPT.format(
-            name=pet["name"], species=pet.get("species", "宠物"), persona=pet.get("persona", ""),
-            catchphrase=pet.get("catchphrase", ""), theme=theme, recent=recent,
+            form=form, extra=extra, line_format=line_format,
+            name=pet["name"], species=pet.get("species", "宠物"), appearance=pet.get("appearance", ""),
+            persona=pet.get("persona", ""), catchphrase=pet.get("catchphrase", ""), theme=theme, recent=recent,
         )
         try:
             script = _call_llm(llm, prompt)
@@ -121,16 +144,20 @@ def generate_script(cfg, theme=None, date=None):
         except Exception as e:  # noqa: BLE001
             print(f"[脚本] 大模型调用失败，改用内置脚本库：{e}")
 
-    return _normalize(_from_bank(theme, date), pet), "builtin"
+    return _normalize(_from_bank(theme, date, mode), pet), "builtin"
 
 
 def script_to_markdown(script, pet):
     rows = [f"# {script['title']}", "", f"- 主题：{script.get('theme', '')}", f"- 出镜：{pet['name']}", ""]
-    rows.append("| # | 情绪 | 台词 |")
-    rows.append("|---|---|---|")
+    story = any(line.get("scene") for line in script["lines"])
+    rows.append("| # | 情绪 | 台词 |" + (" 场景 | 动作 | 镜头 |" if story else ""))
+    rows.append("|---|---|---|" + ("---|---|---|" if story else ""))
     for i, line in enumerate(script["lines"], 1):
         text = f"**{line['text']}**" if line.get("highlight") else line["text"]
-        rows.append(f"| {i} | {line['emotion']} | {text} |")
+        row = f"| {i} | {line['emotion']} | {text} |"
+        if story:
+            row += f" {line.get('scene', '')} | {line.get('action', '')} | {line.get('camera', '')} |"
+        rows.append(row)
     rows += ["", f"**发布文案**：{script.get('caption', '')}", "",
              "**话题**：" + " ".join("#" + t for t in script.get("tags", []))]
     return "\n".join(rows) + "\n"

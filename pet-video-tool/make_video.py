@@ -7,6 +7,7 @@
   python make_video.py --script-only      # 只出脚本，不剪辑
   python make_video.py --from-script output/xxx/script.json   # 用你改过的脚本重新剪
   python make_video.py --mark             # 输出带网格的 IP 图，帮你量嘴巴/眼睛坐标
+  python make_video.py --mode talking     # 临时切换口播模式（默认读 config.yaml 的 mode）
 """
 
 import argparse
@@ -20,7 +21,8 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 
 from petvideo import demo_pet
-from petvideo.animate import ClipAnimator, ImageAnimator, LineTimeline
+from petvideo.animate import ImageAnimator, LineTimeline, ShotAnimator
+from petvideo.media import prepare_shots, write_shot_list
 from petvideo.config import ROOT, load_config, resolve
 from petvideo.render import Overlay, render
 from petvideo.scripts import generate_script, record_history, script_to_markdown
@@ -56,6 +58,25 @@ def mark_grid(cfg):
     print(f"已生成 {out}：横线/竖线上的数字就是相对坐标，用来填写 config.yaml 里的 mouth / eyes。")
 
 
+def build_animator(cfg, script, out, W, H, fps):
+    pet, vcfg = cfg["pet"], cfg["video"]
+
+    def local():
+        image, mouth, eyes = pet_image(cfg)
+        return ImageAnimator(image, {**pet, "_background": vcfg.get("background", "blur")}, W, H, fps, mouth, eyes)
+
+    if cfg.get("mode") == "story":
+        sources = prepare_shots(script, pet, cfg, out)
+        return ShotAnimator(sources, W, H, fps, local() if None in sources else None)
+
+    clips = {k: resolve(v) for k, v in (pet.get("motion_clips") or {}).items() if v and resolve(v).exists()}
+    if not clips:
+        return local()
+    print(f"[动作] 使用动作片段：{', '.join(clips)}")
+    default = clips.get("calm") or next(iter(clips.values()))
+    return ShotAnimator([clips.get(line["emotion"], default) for line in script["lines"]], W, H, fps)
+
+
 def make_one(cfg, date, topic=None, script_path=None, script_only=False):
     pet, vcfg = cfg["pet"], cfg["video"]
     if script_path:
@@ -63,7 +84,10 @@ def make_one(cfg, date, topic=None, script_path=None, script_only=False):
     else:
         script, source = generate_script(cfg, topic, date)
     slug = re.sub(r"[\\/:*?\"<>|\s]+", "", script["title"])[:16]
-    out = resolve(cfg.get("output_dir", "output")) / f"{date.isoformat()}_{slug}"
+    if script_path and Path(script_path).name == "script.json":
+        out = Path(script_path).resolve().parent
+    else:
+        out = resolve(cfg.get("output_dir", "output")) / f"{date.isoformat()}_{slug}"
     out.mkdir(parents=True, exist_ok=True)
     (out / "script.json").write_text(json.dumps(script, ensure_ascii=False, indent=2), encoding="utf-8")
     (out / "script.md").write_text(script_to_markdown(script, pet), encoding="utf-8")
@@ -73,6 +97,9 @@ def make_one(cfg, date, topic=None, script_path=None, script_only=False):
     if not script_path:
         record_history(script)
     if script_only:
+        if cfg.get("mode") == "story":
+            write_shot_list(script, pet, cfg.get("media", {}), out / "shots.md")
+            print(f"[分镜] 分镜表和提示词：{out / 'shots.md'}")
         return out
 
     W, H, fps = vcfg["width"], vcfg["height"], vcfg["fps"]
@@ -87,13 +114,7 @@ def make_one(cfg, date, topic=None, script_path=None, script_only=False):
     n_frames = math.ceil(duration * fps)
     env = envelope(wav, fps)
     timeline = LineTimeline(script["lines"], spans)
-    clips = {k: resolve(v) for k, v in (pet.get("motion_clips") or {}).items() if v and resolve(v).exists()}
-    if clips:
-        print(f"[动作] 使用动作片段：{', '.join(clips)}")
-        animator = ClipAnimator(clips, W, H, fps)
-    else:
-        image, mouth, eyes = pet_image(cfg)
-        animator = ImageAnimator(image, {**pet, "_background": vcfg.get("background", "blur")}, W, H, fps, mouth, eyes)
+    animator = build_animator(cfg, script, out, W, H, fps)
 
     hi = next((i for i, l in enumerate(script["lines"]) if l.get("highlight")), 0)
     cover_t = (spans[hi][0] + spans[hi][1]) / 2
@@ -124,12 +145,15 @@ def main():
     ap.add_argument("--topic", help="指定今天的主题")
     ap.add_argument("--days", type=int, default=1, help="从今天开始连续生成几天")
     ap.add_argument("--date", help="指定日期 YYYY-MM-DD")
+    ap.add_argument("--mode", choices=["story", "talking"], help="story=剧情分镜（对标小斗下班啦），talking=口播")
     ap.add_argument("--script-only", action="store_true")
     ap.add_argument("--from-script", help="用已有/手改过的 script.json 剪辑")
     ap.add_argument("--mark", action="store_true", help="输出带坐标网格的 IP 图")
     args = ap.parse_args()
 
     cfg = load_config(args.config)
+    if args.mode:
+        cfg["mode"] = args.mode
     if args.mark:
         return mark_grid(cfg)
     if not cfg["llm"].get("api_key") and not args.from_script:
