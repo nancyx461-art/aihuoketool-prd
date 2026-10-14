@@ -4,9 +4,6 @@ name: 团团每日视频
 on:
   schedule:
     - cron: "0 0 * * *"  # UTC 0 点 = 北京时间 8 点
-  push:
-    branches: [cursor/pet-ip-video-tool-de12]
-    paths: [.github/workflows/daily-video.yml]
   workflow_dispatch:
     inputs:
       date:
