@@ -94,8 +94,8 @@ video:
   background: blur      # blur（用宠物图模糊做背景） / 纯色如 "#f6e7d0"
   show_title: true
   subtitle_font: null   # 留空自动找系统中文字体，也可填 .ttf/.ttc 路径
-  bgm: null             # 可选背景音乐路径
-  bgm_volume: 0.12
+  bgm: auto             # auto=程序合成的轻快小调（无版权）；也可填你自己的音乐路径；null=不加
+  bgm_volume: 0.25
 
 # ============ 输出 ============
 output_dir: output

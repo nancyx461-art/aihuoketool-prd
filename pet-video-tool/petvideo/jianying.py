@@ -46,8 +46,13 @@ def make_draft(name, out_dir, clean_video, voice_wav, srt, title, duration, W, H
     bgm = resolve(cfg["video"].get("bgm"))
     if bgm and bgm.exists():
         script.append_track(TrackSpec(TrackType.audio, "背景音乐"))
-        script.add_segment(draft.AudioSegment(str(bgm.resolve()), trange(0, total),
-                                              volume=cfg["video"].get("bgm_volume", 0.12)), "背景音乐")
+        music = draft.AudioMaterial(str(bgm.resolve()))
+        start = 0
+        while start < total:
+            length = min(music.duration, total - start)
+            script.add_segment(draft.AudioSegment(music, trange(start, length),
+                                                  volume=cfg["video"].get("bgm_volume", 0.25)), "背景音乐")
+            start += length
 
     script.add_segment(draft.TextSegment(title, trange(0, total),
                                          style=TextStyle(size=9, bold=True, align=1, color=(1.0, 0.85, 0.3)),

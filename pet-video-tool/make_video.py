@@ -9,6 +9,7 @@
   python make_video.py --mark             # 输出带网格的 IP 图，帮你量嘴巴/眼睛坐标
   python make_video.py --mode talking     # 临时切换口播模式（默认读 config.yaml 的 mode）
   python make_video.py --library-plan     # 输出通用镜头素材库清单（做一次，每天复用）
+  python make_video.py --match --from-script content/2026-10-16.json  # 检查每句话匹配到的镜头
 """
 
 import argparse
@@ -26,7 +27,7 @@ from petvideo.animate import ImageAnimator, LineTimeline, ShotAnimator
 from petvideo.media import build_library, prepare_shots, write_library_plan, write_shot_list
 from petvideo.config import ROOT, load_config, resolve
 from petvideo.render import Overlay, render
-from petvideo.scripts import generate_script, record_history, script_to_markdown
+from petvideo.scripts import generate_script, normalize, record_history, script_to_markdown
 from petvideo.subtitles import build_cues, find_font, write_srt
 from petvideo.tts import envelope, synthesize
 
@@ -59,6 +60,25 @@ def mark_grid(cfg):
     print(f"已生成 {out}：横线/竖线上的数字就是相对坐标，用来填写 config.yaml 里的 mouth / eyes。")
 
 
+def print_matches(cfg, script_path):
+    from petvideo.media import _pick_from_library, library_items
+    script = normalize(json.loads(Path(script_path).read_text(encoding="utf-8")), cfg["pet"])
+    picks = _pick_from_library(script["lines"], library_items(cfg.get("media", {})))
+    for i, (line, pick) in enumerate(zip(script["lines"], picks), 1):
+        print(f"{i}. [{line['emotion']}] {line['text']}\n   -> {pick.stem if pick else '无匹配镜头'}")
+
+
+def resolve_bgm(vcfg):
+    if vcfg.get("bgm") == "auto":
+        path = ROOT / "assets" / "bgm_cute.wav"
+        if not path.exists():
+            from petvideo.bgm import make_bgm
+            print("[音乐] 首次运行，合成默认背景音乐……")
+            make_bgm(path)
+        vcfg["bgm"] = str(path)
+    return resolve(vcfg.get("bgm"))
+
+
 def build_animator(cfg, script, out, W, H, fps):
     pet, vcfg = cfg["pet"], cfg["video"]
 
@@ -81,7 +101,7 @@ def build_animator(cfg, script, out, W, H, fps):
 def make_one(cfg, date, topic=None, script_path=None, script_only=False):
     pet, vcfg = cfg["pet"], cfg["video"]
     if script_path:
-        script, source = json.loads(Path(script_path).read_text(encoding="utf-8")), "file"
+        script, source = normalize(json.loads(Path(script_path).read_text(encoding="utf-8")), cfg["pet"]), "file"
     else:
         script, source = generate_script(cfg, topic, date)
     slug = re.sub(r"[\\/:*?\"<>|\s]+", "", script["title"])[:16]
@@ -117,14 +137,13 @@ def make_one(cfg, date, topic=None, script_path=None, script_only=False):
     timeline = LineTimeline(script["lines"], spans)
     animator = build_animator(cfg, script, out, W, H, fps)
 
-    hi = next((i for i, l in enumerate(script["lines"]) if l.get("highlight")), 0)
-    cover_t = (spans[hi][0] + spans[hi][1]) / 2
+    cover_t = (spans[0][0] + spans[0][1]) / 2
     overlay = Overlay(find_font(vcfg.get("subtitle_font")), W, H, script["title"], cues, script["lines"],
                       vcfg.get("show_title", True))
-    bgm = resolve(vcfg.get("bgm"))
+    bgm = resolve_bgm(vcfg)
     final, clean = out / "final.mp4", out / "clean_no_subtitles.mp4"
     render(animator.frames(timeline, env, n_frames), overlay, n_frames, fps, W, H, wav, final, clean,
-           bgm if bgm and bgm.exists() else None, vcfg.get("bgm_volume", 0.12),
+           bgm if bgm and bgm.exists() else None, vcfg.get("bgm_volume", 0.25),
            cover_path=out / "cover.jpg", cover_frame=int(cover_t * fps))
     print(f"[成片] {final}")
 
@@ -151,6 +170,7 @@ def main():
     ap.add_argument("--from-script", help="用已有/手改过的 script.json 剪辑")
     ap.add_argument("--mark", action="store_true", help="输出带坐标网格的 IP 图")
     ap.add_argument("--library-plan", action="store_true", help="输出通用镜头素材库清单和提示词")
+    ap.add_argument("--match", action="store_true", help="配合 --from-script：打印每句话会用素材库里的哪个镜头")
     ap.add_argument("--build-library", action="store_true", help="用火山方舟一次性生成素材库里缺的镜头")
     args = ap.parse_args()
 
@@ -159,6 +179,8 @@ def main():
         cfg["mode"] = args.mode
     if args.mark:
         return mark_grid(cfg)
+    if args.match:
+        return print_matches(cfg, args.from_script)
     if args.library_plan or args.build_library:
         out = ROOT / "output" / "library_plan.md"
         out.parent.mkdir(exist_ok=True)

@@ -70,7 +70,7 @@ def _fill(text, pet):
     return text.replace("{name}", pet["name"]).replace("{catchphrase}", pet.get("catchphrase", ""))
 
 
-def _normalize(script, pet):
+def normalize(script, pet):
     lines = []
     for line in script.get("lines", []):
         text = _fill(str(line.get("text", "")).strip(), pet)
@@ -147,11 +147,11 @@ def generate_script(cfg, theme=None, date=None):
         try:
             script = _call_llm(llm, prompt)
             script.setdefault("theme", theme)
-            return _normalize(script, pet), f"llm:{llm['model']}"
+            return normalize(script, pet), f"llm:{llm['model']}"
         except Exception as e:  # noqa: BLE001
             print(f"[脚本] 大模型调用失败，改用内置脚本库：{e}")
 
-    return _normalize(_from_bank(theme, date, mode), pet), "builtin"
+    return normalize(_from_bank(theme, date, mode), pet), "builtin"
 
 
 def script_to_markdown(script, pet):
