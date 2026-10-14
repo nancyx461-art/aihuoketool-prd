@@ -131,6 +131,10 @@ motion_clips:
 
 ## 每天自动跑
 
+**推荐：交给 Cursor 云端 Agent**。不用开电脑，也不用大模型 API Key。选题、写剧本、补镜头、出片都由 Agent 完成，成片会出现在当天 Agent 的页面里，手机上就能下载。设置方法和提示词见 [`automation_prompt.md`](automation_prompt.md)。已经做好的剧本放在 `content/`，发布时间和文案见 `content/发布日历.md`。
+
+如果想在自己电脑上跑（需要设置 `LLM_API_KEY`，否则会轮换使用内置剧本）：
+
 - **Windows**：打开"任务计划程序"，选择"创建基本任务"，触发器设为"每天"，操作选"启动程序"并指向 `daily.bat`。
 - **macOS / Linux**：运行 `crontab -e`，加一行 `0 8 * * * /路径/pet-video-tool/daily.sh`（每天 8 点）。
 
