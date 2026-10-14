@@ -31,6 +31,15 @@ async def _edge(text, out, voice, rate, pitch):
     await edge_tts.Communicate(text, voice, rate=rate, pitch=pitch).save(str(out))
 
 
+def _gtts(text, out, speed, pitch):
+    from gtts import gTTS
+    raw = Path(out).with_suffix(".raw.mp3")
+    gTTS(text, lang="zh-CN").save(str(raw))
+    af = f"asetrate={SR}*{pitch},aresample={SR},atempo={speed / pitch:.4f}"
+    subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(raw), "-ar", str(SR), "-af", af, str(out)],
+                   check=True, capture_output=True)
+
+
 def _espeak(text, out, rate, pitch):
     exe = shutil.which("espeak-ng") or shutil.which("espeak")
     if not exe:
@@ -55,9 +64,16 @@ def synthesize(lines, tts_cfg, out_wav):
                 try:
                     asyncio.run(_edge(line["text"], path, voice, rate, pitch))
                 except Exception as e:  # noqa: BLE001
-                    print(f"[配音] edge-tts 不可用（{e.__class__.__name__}），改用离线 espeak-ng")
+                    print(f"[配音] edge-tts 不可用（{e.__class__.__name__}），改用谷歌语音 gTTS")
+                    engine = "gtts"
+            if engine == "gtts":
+                path = path.with_suffix(".wav")
+                try:
+                    _gtts(line["text"], path, tts_cfg.get("gtts_speed", 1.25), tts_cfg.get("gtts_pitch", 1.1))
+                except Exception as e:  # noqa: BLE001
+                    print(f"[配音] gTTS 不可用（{e.__class__.__name__}），改用离线 espeak-ng")
                     engine = "espeak"
-            if engine != "edge":
+            if engine == "espeak":
                 path = path.with_suffix(".wav")
                 _espeak(line["text"], path, rate, pitch)
             audio = _trim_silence(_decode(path))

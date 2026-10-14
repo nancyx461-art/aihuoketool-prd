@@ -78,11 +78,13 @@ media:
 
 # ============ 配音 ============
 tts:
-  engine: edge          # edge（免费、音色好，需联网） / espeak（离线兜底，机械音）
+  engine: edge          # edge（微软，免费、音色最好） / gtts（谷歌，免费） / espeak（离线兜底，机械音）；连不上会依次降级
   voice: zh-CN-XiaoyiNeural   # 活泼女声；也可试 zh-CN-YunxiNeural（少年感男声）
   rate: "+8%"
   pitch: "+12Hz"
   gap: 0.22             # 句与句之间停顿（秒）
+  gtts_speed: 1.25      # gTTS 语速倍数
+  gtts_pitch: 1.1       # gTTS 音调倍数（>1 更萌）
 
 # ============ 画面 ============
 video:

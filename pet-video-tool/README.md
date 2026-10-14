@@ -90,6 +90,8 @@ python make_video.py --from-script output/某天/script.json   # 改完脚本重
 
 ## 省钱做法：素材库（推荐）
 
+仓库里已经放好了一套现成的：`assets/pet.png` 是示例 IP「团团」（橘白猫，蓝色工牌、帆布小挎包），`assets/library/` 里有 17 个职场日常镜头，下载后直接运行就能出剧情视频。换成你自己的 IP 时，用你的 IP 图做参考图，按同样的文件名重新生成这些镜头即可。
+
 每天都按镜头调用 AI 生成视频会很贵。职场日常的镜头其实高度重复（工位打字、趴桌叹气、捂脸崩溃、电梯、地铁、下班路上、喝奶茶），所以可以**一次性做好一套通用镜头，之后每天复用**：
 
 ```bash
@@ -134,4 +136,4 @@ motion_clips:
 
 ## 配音说明
 
-默认使用免费的微软 edge-tts（`zh-CN-XiaoyiNeural`，活泼女声），需要联网。少年感音色可以换 `zh-CN-YunxiNeural`，在 `config.yaml` 的 `tts` 里调整语速和音调。edge-tts 连不上时，会自动退回离线的 espeak-ng（机械音，只适合测试，需要另外安装）。
+默认使用免费的微软 edge-tts（`zh-CN-XiaoyiNeural`，活泼女声），需要联网。少年感音色可以换 `zh-CN-YunxiNeural`，在 `config.yaml` 的 `tts` 里调整语速和音调。edge-tts 连不上时，会依次退回谷歌语音 gTTS（免费，可调语速和音调），再退回离线的 espeak-ng（机械音，只适合测试，需要另外安装）。

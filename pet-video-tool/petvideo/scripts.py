@@ -88,7 +88,8 @@ def _normalize(script, pet):
     script["lines"] = lines
     script["title"] = _fill(script.get("title") or lines[0]["text"][:12], pet)
     script.setdefault("caption", "")
-    script.setdefault("tags", ["职场", "打工人"])
+    script["tags"] = [_fill(t, pet) for t in script.get("tags") or ["职场", "打工人"]]
+    script["caption"] = _fill(script["caption"], pet)
     return script
 
 
