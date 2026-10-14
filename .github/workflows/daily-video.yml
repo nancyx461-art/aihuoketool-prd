@@ -1,0 +1,66 @@
+name: 团团每日视频
+
+on:
+  schedule:
+    - cron: "0 0 * * *"  # UTC 0 点 = 北京时间 8 点
+  push:
+    branches: [cursor/pet-ip-video-tool-de12]
+    paths: [.github/workflows/daily-video.yml]
+  workflow_dispatch:
+    inputs:
+      date:
+        description: "日期 YYYY-MM-DD，留空为今天（北京时间）"
+        required: false
+
+permissions:
+  contents: write
+
+concurrency: daily-video
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: pet-video-tool
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: pet-video-tool/requirements.txt
+
+      - name: 安装 ffmpeg 和中文字体
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg fonts-noto-cjk
+
+      - run: pip install -q -r requirements.txt
+
+      - name: 选题、写剧本、出片
+        id: make
+        env:
+          LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
+          LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
+          LLM_MODEL: ${{ vars.LLM_MODEL }}
+        run: ./daily_ci.sh "${{ inputs.date }}"
+
+      - name: 发布到 Releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+          DATE: ${{ steps.make.outputs.date }}
+        run: |
+          TAG="video-$DATE"
+          gh release delete "$TAG" -y --cleanup-tag 2>/dev/null || true
+          gh release create "$TAG" release/tuantuan-*.mp4 release/tuantuan-*-cover.jpg \
+            --title "$DATE $(cat release/title.txt)" --notes-file release/notes.md --target "$GITHUB_SHA"
+
+      - name: 新写的剧本存回仓库（用于之后的选题去重）
+        if: steps.make.outputs.new_script == '1'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
+          git add content/
+          git commit -m "content: ${{ steps.make.outputs.date }} 每日剧本"
+          git push

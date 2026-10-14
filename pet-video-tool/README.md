@@ -131,7 +131,13 @@ motion_clips:
 
 ## 每天自动跑
 
-**推荐：交给 Cursor 云端 Agent**。不用开电脑，也不用大模型 API Key。选题、写剧本、补镜头、出片都由 Agent 完成，成片会出现在当天 Agent 的页面里，手机上就能下载。设置方法和提示词见 [`automation_prompt.md`](automation_prompt.md)。已经做好的剧本放在 `content/`，发布时间和文案见 `content/发布日历.md`。
+**推荐：GitHub 定时任务（已配好，`.github/workflows/daily-video.yml`）**。每天北京时间 8 点，GitHub 会自动出当天的视频，发到仓库的 **Releases** 页面。每天一条，里面有视频、封面、可直接复制的文案和话题，用手机浏览器或 GitHub App 就能下载。
+
+- 选题来源：`content/<日期>.json` 有排好的剧本就用排好的；没有的话，设置了 `LLM_API_KEY` 就由大模型现写，写好的剧本会自动存回 `content/`，用于之后去重。
+- 设置大模型：仓库 Settings → Secrets and variables → Actions，在 Secrets 里添加 `LLM_API_KEY`（比如 DeepSeek 的密钥）。如果用别家模型，再到 Variables 里添加 `LLM_BASE_URL` 和 `LLM_MODEL`。
+- 手动补跑：Actions → 团团每日视频 → Run workflow，可以指定日期。
+
+另一种方式是交给 Cursor 云端 Agent。它还能自己补拍新镜头，但需要在 Cursor 网页上手动创建自动化，提示词见 [`automation_prompt.md`](automation_prompt.md)。发布时间和文案见 `content/发布日历.md`。
 
 如果想在自己电脑上跑（需要设置 `LLM_API_KEY`，否则会轮换使用内置剧本）：
 
