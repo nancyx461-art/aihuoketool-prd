@@ -75,6 +75,11 @@ media:
   duration: 5
   concurrency: 3
   style: null             # 留空用默认画风：写实、电影感自然光、温暖治愈、人类不露脸、无文字
+  new_shots:              # 每天按剧本设计新场景，用火山方舟 Seedream 以 IP 图为参考补拍，存进素材库长期复用
+    enabled: true         # 需要环境变量 ARK_API_KEY；没有就只用素材库现有镜头
+    max_per_video: 2      # 每条视频最多补拍几张（每张约 0.2 元）
+    model: doubao-seedream-4-0-250828   # 也可用环境变量 ARK_IMAGE_MODEL 覆盖
+    size: 1440x2560
 
 # ============ 配音 ============
 tts:

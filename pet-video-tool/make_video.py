@@ -136,6 +136,7 @@ def make_one(cfg, date, topic=None, script_path=None, script_only=False):
     env = envelope(wav, fps)
     timeline = LineTimeline(script["lines"], spans)
     animator = build_animator(cfg, script, out, W, H, fps)
+    (out / "script.json").write_text(json.dumps(script, ensure_ascii=False, indent=2), encoding="utf-8")
 
     cover_t = (spans[0][0] + spans[0][1]) / 2
     overlay = Overlay(find_font(vcfg.get("subtitle_font")), W, H, script["title"], cues, script["lines"],

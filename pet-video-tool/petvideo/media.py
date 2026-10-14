@@ -143,11 +143,86 @@ class ArkVideo:
         raise TimeoutError("生成超时")
 
 
+class ArkImage:
+    """火山方舟 Seedream：文字 + IP 参考图 → 一张新镜头图片。"""
+
+    def __init__(self, cfg):
+        self.key = os.environ["ARK_API_KEY"]
+        self.base = os.environ.get("ARK_BASE_URL", "https://ark.cn-beijing.volces.com/api/v3").rstrip("/")
+        self.model = os.environ.get("ARK_IMAGE_MODEL") or cfg.get("model", "doubao-seedream-4-0-250828")
+        self.size = cfg.get("size", "1440x2560")
+
+    def generate(self, prompt, ref_uris, out_path):
+        body = {"model": self.model, "prompt": prompt, "image": ref_uris, "size": self.size,
+                "response_format": "b64_json", "watermark": False, "sequential_image_generation": "disabled"}
+        req = urllib.request.Request(self.base + "/images/generations", data=json.dumps(body).encode(),
+                                     headers={"Content-Type": "application/json", "Authorization": f"Bearer {self.key}"})
+        with urllib.request.urlopen(req, timeout=180) as r:
+            data = json.loads(r.read())["data"][0]
+        img = Image.open(io.BytesIO(base64.b64decode(data["b64_json"]))).convert("RGB")
+        img.thumbnail((1080, 1920))
+        img.save(out_path, "JPEG", quality=88)
+        return out_path
+
+
+def _shot_name(line):
+    name = (line.get("new_shot") or {}).get("name") or "_".join(
+        x for x in (line.get("scene"), line.get("action"), EMOTION_WORDS.get(line["emotion"], ("",))[0]) if x)
+    parts = [re.sub(r"[^\w]", "", t) for t in re.split(r"[_\-\s，,、。；;]+", name)]
+    return "_".join(t[:8] for t in parts if t)[:40]
+
+
+def create_new_shots(script, pet, media_cfg):
+    """给剧本里设计了新场景（new_shot）或素材库匹配不到的句子补拍镜头，存进素材库，返回新镜头文件名。"""
+    ncfg = media_cfg.get("new_shots") or {}
+    limit = ncfg.get("max_per_video", 2)
+    if not ncfg.get("enabled") or not limit:
+        return []
+    lines = script["lines"]
+    picks = _pick_from_library(lines, library_items(media_cfg))
+    wanted = [i for i, l in enumerate(lines) if l.get("new_shot")]
+    wanted += [i for i, p in enumerate(picks) if p is None and i not in wanted]
+    if not wanted:
+        return []
+    if not os.environ.get("ARK_API_KEY"):
+        print(f"[新镜头] 有 {len(wanted)} 句想用新场景，但没有设置 ARK_API_KEY，改用素材库现有镜头")
+        return []
+    refs = [resolve(p) for p in (pet.get("reference_images") or [pet.get("image")])]
+    refs = [_data_uri(p) for p in refs if p and p.exists()]
+    if not refs:
+        print("[新镜头] 没有找到 IP 参考图（pet.image），跳过")
+        return []
+    root = resolve(media_cfg.get("library", "assets/library"))
+    have = {p.stem for p, _ in library_items(media_cfg)}
+    gen, created = ArkImage(ncfg), []
+    for i in wanted[:limit]:
+        line, name = lines[i], _shot_name(lines[i])
+        if not name:
+            continue
+        if name not in have:
+            desc = (line.get("new_shot") or {}).get("prompt") or shot_prompt(line, pet, media_cfg)
+            prompt = (f"参考图里的这只{pet.get('species', '宠物')}就是主角，脸型、毛色、眼睛颜色、体型必须和参考图完全一致。"
+                      f"外形：{pet.get('appearance', '')}。画面：{desc}。{media_cfg.get('style') or DEFAULT_STYLE}")
+            try:
+                gen.generate(prompt, refs, root / f"{name}.jpg")
+            except Exception as e:  # noqa: BLE001
+                print(f"[新镜头] {name} 生成失败：{e}")
+                continue
+            have.add(name)
+            created.append(name)
+            print(f"[新镜头] {name}")
+        line["shot"] = name
+        line.pop("new_shot", None)
+    return created
+
+
 def prepare_shots(script, pet, cfg, out_dir):
     """返回每句台词对应的素材路径（None 表示用本地宠物动画兜底）。"""
     media_cfg = cfg.get("media", {})
     shots_dir = out_dir / "shots"
     shots_dir.mkdir(exist_ok=True)
+    created = create_new_shots(script, pet, media_cfg)
+    (out_dir / "new_shots.txt").write_text("\n".join(created), encoding="utf-8")
     write_shot_list(script, pet, media_cfg, out_dir / "shots.md")
     sources = [_existing(shots_dir, i) for i in range(1, len(script["lines"]) + 1)]
 

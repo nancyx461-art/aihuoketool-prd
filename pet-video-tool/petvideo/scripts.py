@@ -87,6 +87,7 @@ def normalize(script, pet):
             "emotion": emotion if emotion in EMOTIONS else "calm",
             "highlight": bool(line.get("highlight")),
             **{k: str(line[k]).strip() for k in ("scene", "action", "camera", "shot") if line.get(k)},
+            **({"new_shot": line["new_shot"]} if isinstance(line.get("new_shot"), dict) else {}),
         })
     if not lines:
         raise ValueError("脚本没有任何台词")
@@ -143,7 +144,12 @@ def generate_script(cfg, theme=None, date=None):
             items = library_items(cfg.get("media", {}))
             if items:
                 extra += ("11. 我已经有这些现成镜头（用标签描述），请尽量让分镜的场景和动作用上这些标签里的词，"
-                          "这样可以直接复用素材：" + "；".join("/".join(tags) for _, tags in items[:80]) + "\n")
+                          "这样可以直接复用素材：" + "；".join("/".join(tags) for _, tags in items[:120]) + "\n")
+            ncfg = cfg.get("media", {}).get("new_shots") or {}
+            if ncfg.get("enabled") and ncfg.get("max_per_video"):
+                extra += (f"12. 为了让画面常看常新，请根据今天的故事设计 1~{ncfg['max_per_video']} 个现成镜头里没有的新场景，"
+                          "在那几句里加 \"new_shot\": {\"name\": \"场景_动作_情绪（3~4 个中文短词，下划线分隔）\", "
+                          "\"prompt\": \"画面描述：具体场景和道具、宠物的动作和表情、光线、构图\"}；其余句子复用现成镜头。\n")
         prompt = PROMPT.format(
             form=form, extra=extra, line_format=line_format,
             name=pet["name"], species=pet.get("species", "宠物"), appearance=pet.get("appearance", ""),
