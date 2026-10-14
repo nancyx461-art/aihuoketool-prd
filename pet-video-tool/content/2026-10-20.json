@@ -1,0 +1,71 @@
+{
+  "theme": "开不完的会",
+  "title": "今天开了四个会",
+  "lines": [
+    {
+      "text": "今天开了四个会，我做了零件事。",
+      "emotion": "shock",
+      "scene": "工位",
+      "action": "看屏幕吃惊",
+      "camera": "中景"
+    },
+    {
+      "text": "第一个会，讨论要不要开会。",
+      "emotion": "calm",
+      "scene": "会议室",
+      "action": "开会发呆",
+      "camera": "中景"
+    },
+    {
+      "text": "第二个会，同步第一个会的结论。",
+      "emotion": "sad",
+      "scene": "会议室",
+      "action": "开会发呆，累",
+      "camera": "中景"
+    },
+    {
+      "text": "第三个会，有人问：刚刚说到哪了？",
+      "emotion": "angry",
+      "scene": "工位",
+      "action": "捂脸崩溃",
+      "camera": "中景"
+    },
+    {
+      "text": "第四个会，约下周再对一下。",
+      "emotion": "sad",
+      "scene": "工位",
+      "action": "趴桌，累",
+      "camera": "中景"
+    },
+    {
+      "text": "会开得越多，越要守住自己做事的时间。",
+      "emotion": "calm",
+      "scene": "会议室",
+      "action": "举手发言，认真",
+      "camera": "中景",
+      "highlight": true
+    },
+    {
+      "text": "试试每天留一小时，不回消息，只干活。",
+      "emotion": "happy",
+      "scene": "工位",
+      "action": "认真打字",
+      "camera": "中景"
+    },
+    {
+      "text": "你今天开了几个会？",
+      "emotion": "happy",
+      "scene": "镜头前",
+      "action": "歪头眨眼挥爪",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "会可以开，做事的时间要自己守住。",
+  "tags": [
+    "开会",
+    "职场",
+    "打工人",
+    "英短",
+    "AI萌宠"
+  ]
+}

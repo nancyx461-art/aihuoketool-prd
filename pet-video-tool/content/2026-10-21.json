@@ -1,0 +1,71 @@
+{
+  "theme": "微信\"收到\"背后的千言万语",
+  "title": "打工人的\"收到\"",
+  "lines": [
+    {
+      "text": "你知道打工人的\"收到\"，有几种意思吗？",
+      "emotion": "shock",
+      "scene": "工位",
+      "action": "看手机",
+      "camera": "中景"
+    },
+    {
+      "text": "\"收到\"，是我看到了。",
+      "emotion": "calm",
+      "scene": "工位",
+      "action": "喝咖啡，平静",
+      "camera": "中景"
+    },
+    {
+      "text": "\"收到！\"，是我马上去干。",
+      "emotion": "happy",
+      "scene": "工位",
+      "action": "认真打字",
+      "camera": "中景"
+    },
+    {
+      "text": "\"好的收到\"，是我已经在心里骂人了。",
+      "emotion": "angry",
+      "scene": "工位",
+      "action": "捂脸崩溃",
+      "camera": "中景"
+    },
+    {
+      "text": "而一个\"嗯\"，是我真的累得说不出话了。",
+      "emotion": "sad",
+      "scene": "深夜地铁站",
+      "action": "回家，累",
+      "camera": "中景"
+    },
+    {
+      "text": "两个字，扛住了一整天的情绪。",
+      "emotion": "calm",
+      "scene": "工位",
+      "action": "趴桌，累",
+      "camera": "中景"
+    },
+    {
+      "text": "别嫌自己回得冷淡，你只是把力气都给了工作。",
+      "emotion": "calm",
+      "scene": "窗边夕阳",
+      "action": "看窗外，温柔",
+      "camera": "侧面近景",
+      "highlight": true
+    },
+    {
+      "text": "今天的你，也收到团团的抱抱了吗？",
+      "emotion": "happy",
+      "scene": "镜头前",
+      "action": "歪头眨眼挥爪",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "一句\"收到\"，藏着打工人全部的体面。",
+  "tags": [
+    "收到",
+    "职场梗",
+    "打工人",
+    "英短",
+    "AI萌宠"
+  ]
+}
