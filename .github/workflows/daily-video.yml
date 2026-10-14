@@ -1,4 +1,5 @@
 name: 团团每日视频
+# 每天出一条视频发到 Releases，详见 pet-video-tool/README.md「每天自动跑」
 
 on:
   schedule:
