@@ -3,9 +3,9 @@
 import json
 from pathlib import Path
 
-L = lambda text, emotion, scene, action, camera="中景", highlight=False: {  # noqa: E731
+L = lambda text, emotion, scene, action, camera="中景", highlight=False, shot=None: {  # noqa: E731
     "text": text, "emotion": emotion, "scene": scene, "action": action, "camera": camera,
-    **({"highlight": True} if highlight else {})}
+    **({"highlight": True} if highlight else {}), **({"shot": shot} if shot else {})}
 
 WEEK = {
     "2026-10-16": {

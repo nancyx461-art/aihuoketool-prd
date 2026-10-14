@@ -1,0 +1,71 @@
+{
+  "theme": "做的事被同事抢功",
+  "title": "我的方案被抢功了",
+  "lines": [
+    {
+      "text": "我熬了三个晚上做的方案，今天上会了。",
+      "emotion": "happy",
+      "scene": "工位",
+      "action": "认真打字",
+      "camera": "中景"
+    },
+    {
+      "text": "结果同事站起来说：这是我做的。",
+      "emotion": "shock",
+      "scene": "会议室",
+      "action": "同事抢功，生气",
+      "camera": "中景"
+    },
+    {
+      "text": "我气得腮帮子都鼓起来了。",
+      "emotion": "angry",
+      "scene": "会议室",
+      "action": "同事抢功，生气",
+      "camera": "面部特写"
+    },
+    {
+      "text": "回到工位，我委屈了一整个下午。",
+      "emotion": "sad",
+      "scene": "工位",
+      "action": "趴桌，难过",
+      "camera": "中景"
+    },
+    {
+      "text": "后来我学会了：做完的事，要让人看见。",
+      "emotion": "calm",
+      "scene": "工位",
+      "action": "认真打字",
+      "camera": "中景"
+    },
+    {
+      "text": "闷头干活很好，但也要学会大声汇报。",
+      "emotion": "calm",
+      "scene": "会议室",
+      "action": "举手发言，认真",
+      "camera": "中景",
+      "highlight": true
+    },
+    {
+      "text": "你的努力值得被看见，别不好意思说。",
+      "emotion": "happy",
+      "scene": "工位",
+      "action": "被夸，害羞开心",
+      "camera": "中景"
+    },
+    {
+      "text": "你的功劳，被别人抢过吗？",
+      "emotion": "happy",
+      "scene": "镜头前",
+      "action": "歪头眨眼挥爪",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "闷头干活很好，但也要学会大声汇报。",
+  "tags": [
+    "抢功",
+    "职场",
+    "汇报",
+    "英短",
+    "AI萌宠"
+  ]
+}

@@ -66,9 +66,14 @@ def library_items(media_cfg):
 
 
 def _pick_from_library(lines, items):
-    """按台词的场景/动作/情绪给每个素材打分，选最贴合的，并避免相邻镜头重复。"""
+    """按台词的场景/动作/情绪给每个素材打分，选最贴合的，并避免相邻镜头重复。台词里写了 shot（素材文件名）就直接用它。"""
     picks, used = [], {}
+    by_name = {path.stem: path for path, _ in items}
     for line in lines:
+        if line.get("shot") in by_name:
+            picks.append(by_name[line["shot"]])
+            used[picks[-1]] = used.get(picks[-1], 0) + 1
+            continue
         text = "".join(line.get(k, "") for k in ("scene", "action", "text"))
         emo = EMOTION_WORDS.get(line["emotion"], ())
         best, best_score = None, 2.5

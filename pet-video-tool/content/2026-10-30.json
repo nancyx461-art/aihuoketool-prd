@@ -1,0 +1,71 @@
+{
+  "theme": "月底总结：我好像什么都没做",
+  "title": "这个月我做了什么",
+  "lines": [
+    {
+      "text": "月底了，我打开文档写月度总结。",
+      "emotion": "calm",
+      "scene": "工位",
+      "action": "认真打字",
+      "camera": "中景"
+    },
+    {
+      "text": "写了半天，只写出来一行字。",
+      "emotion": "sad",
+      "scene": "工位",
+      "action": "捂脸崩溃",
+      "camera": "中景"
+    },
+    {
+      "text": "我好像，这个月什么都没做。",
+      "emotion": "sad",
+      "scene": "工位",
+      "action": "趴桌，难过",
+      "camera": "中景"
+    },
+    {
+      "text": "可是翻翻聊天记录，我扛过了十几个会。",
+      "emotion": "calm",
+      "scene": "会议室",
+      "action": "开会发呆，累",
+      "camera": "中景"
+    },
+    {
+      "text": "改过八版方案，加过好几次班。",
+      "emotion": "calm",
+      "scene": "深夜地铁站",
+      "action": "回家，累",
+      "camera": "全景"
+    },
+    {
+      "text": "你不是没做事，只是忘了记下自己有多努力。",
+      "emotion": "calm",
+      "scene": "窗边夕阳",
+      "action": "看窗外，温柔",
+      "camera": "侧面近景",
+      "highlight": true
+    },
+    {
+      "text": "这个月辛苦了，下个月我们继续加油。",
+      "emotion": "happy",
+      "scene": "工位",
+      "action": "收拾包下班，开心",
+      "camera": "中景"
+    },
+    {
+      "text": "你这个月最骄傲的一件事是什么？",
+      "emotion": "happy",
+      "scene": "镜头前",
+      "action": "歪头眨眼挥爪",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "你不是没做事，只是忘了记下自己有多努力。",
+  "tags": [
+    "月底",
+    "总结",
+    "打工人",
+    "英短",
+    "治愈"
+  ]
+}

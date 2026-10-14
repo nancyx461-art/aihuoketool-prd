@@ -1,0 +1,71 @@
+{
+  "theme": "午休那半小时",
+  "title": "打工人的午休",
+  "lines": [
+    {
+      "text": "中午十二点，是我一天最期待的时刻。",
+      "emotion": "happy",
+      "scene": "工位",
+      "action": "看手机，开心",
+      "camera": "中景"
+    },
+    {
+      "text": "刚趴下准备睡一会儿，消息又来了。",
+      "emotion": "shock",
+      "scene": "工位",
+      "action": "看屏幕吃惊",
+      "camera": "中景"
+    },
+    {
+      "text": "回完消息，午休只剩下五分钟。",
+      "emotion": "sad",
+      "scene": "工位",
+      "action": "趴桌，累",
+      "camera": "中景"
+    },
+    {
+      "text": "我决定，明天午休把手机调成静音。",
+      "emotion": "calm",
+      "scene": "茶水间",
+      "action": "摸鱼，偷吃饼干",
+      "camera": "中景"
+    },
+    {
+      "text": "下楼买杯奶茶，晒晒太阳也很好。",
+      "emotion": "happy",
+      "scene": "长椅",
+      "action": "喝奶茶，温柔",
+      "camera": "中景"
+    },
+    {
+      "text": "午休那半小时，是只属于你自己的。",
+      "emotion": "calm",
+      "scene": "窗边夕阳",
+      "action": "看窗外，温柔",
+      "camera": "侧面近景",
+      "highlight": true
+    },
+    {
+      "text": "下午的工作，等你回来再说。",
+      "emotion": "happy",
+      "scene": "工位",
+      "action": "喝咖啡，平静",
+      "camera": "中景"
+    },
+    {
+      "text": "你的午休，是睡觉还是刷手机？",
+      "emotion": "happy",
+      "scene": "镜头前",
+      "action": "歪头眨眼挥爪",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "午休那半小时，是只属于你自己的。",
+  "tags": [
+    "午休",
+    "打工人",
+    "职场",
+    "英短",
+    "AI萌宠"
+  ]
+}

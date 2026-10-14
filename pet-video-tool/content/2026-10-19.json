@@ -1,0 +1,78 @@
+{
+  "theme": "周一上班的精神状态",
+  "title": "周一的团团不想上班",
+  "lines": [
+    {
+      "text": "周一早上七点，闹钟响了第五遍。",
+      "emotion": "sad",
+      "highlight": false,
+      "scene": "清晨的出租屋卧室，窗帘透进一点光",
+      "action": "缩在被子里，只露出一个脑袋，伸爪按掉手机闹钟",
+      "camera": "俯拍特写"
+    },
+    {
+      "text": "我的身体起床了，灵魂还在被窝里。",
+      "emotion": "sad",
+      "highlight": false,
+      "scene": "卧室床边",
+      "action": "坐在床边发呆，毛有点乱，眼睛半睁",
+      "camera": "中景固定"
+    },
+    {
+      "text": "挤地铁的时候，我被挤成了一张薄饼。",
+      "emotion": "angry",
+      "highlight": false,
+      "scene": "早高峰地铁车厢，周围是穿通勤装的人腿和背包",
+      "action": "被人群夹在中间，脸贴着扶手杆，挎着小包",
+      "camera": "近景，轻微晃动"
+    },
+    {
+      "text": "到了工位，同事问我状态怎么样。",
+      "emotion": "calm",
+      "highlight": false,
+      "scene": "开放式办公室工位，同事只露出手拿咖啡的手",
+      "action": "趴在桌上，抬起一只眼睛看旁边",
+      "camera": "中景"
+    },
+    {
+      "text": "我说，在线，但不完全在线。",
+      "emotion": "calm",
+      "highlight": false,
+      "scene": "工位",
+      "action": "慢慢举起一只爪子比了个 OK",
+      "camera": "面部特写"
+    },
+    {
+      "text": "周一难，是因为你周末真的有好好生活过。",
+      "emotion": "calm",
+      "highlight": true,
+      "scene": "工位窗边，阳光照进来",
+      "action": "看向窗外，表情慢慢变温柔",
+      "camera": "侧面近景，缓慢推近"
+    },
+    {
+      "text": "今天先完成一件小事就好，剩下的慢慢来。",
+      "emotion": "happy",
+      "highlight": false,
+      "scene": "工位",
+      "action": "坐直身子，用爪子敲了一下键盘，尾巴摇起来",
+      "camera": "中景"
+    },
+    {
+      "text": "喵的，今天也辛苦了。",
+      "emotion": "happy",
+      "highlight": false,
+      "scene": "工位",
+      "action": "转头对镜头笑，挥挥爪子",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "周一难，是因为你周末真的有好好生活。",
+  "tags": [
+    "周一",
+    "萌宠上班",
+    "打工人",
+    "AI萌宠",
+    "治愈"
+  ]
+}

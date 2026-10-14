@@ -13,8 +13,8 @@ def load_config(path=None):
 
     llm = cfg.setdefault("llm", {})
     llm["api_key"] = os.environ.get("LLM_API_KEY", "")
-    llm["base_url"] = os.environ.get("LLM_BASE_URL", llm.get("base_url", "https://api.deepseek.com"))
-    llm["model"] = os.environ.get("LLM_MODEL", llm.get("model", "deepseek-chat"))
+    llm["base_url"] = os.environ.get("LLM_BASE_URL") or llm.get("base_url") or "https://api.deepseek.com"
+    llm["model"] = os.environ.get("LLM_MODEL") or llm.get("model") or "deepseek-chat"
     return cfg
 
 

@@ -1,0 +1,72 @@
+{
+  "theme": "领导画大饼",
+  "title": "领导又画饼了",
+  "lines": [
+    {
+      "text": "今天领导在白板上，画了一个很大的饼。",
+      "emotion": "calm",
+      "scene": "会议室",
+      "action": "画大饼，无语",
+      "camera": "中景"
+    },
+    {
+      "text": "他说：好好干，明年你就是骨干。",
+      "emotion": "calm",
+      "scene": "会议室",
+      "action": "画大饼，无语",
+      "camera": "面部特写",
+      "shot": "会议室_画大饼_无语"
+    },
+    {
+      "text": "我算了算，这话去年也说过。",
+      "emotion": "angry",
+      "scene": "工位",
+      "action": "捂脸崩溃",
+      "camera": "中景"
+    },
+    {
+      "text": "饼很香，可是我的工资没变。",
+      "emotion": "sad",
+      "scene": "工位",
+      "action": "趴桌，累",
+      "camera": "中景"
+    },
+    {
+      "text": "我没有拆穿，只是默默打开了学习笔记。",
+      "emotion": "calm",
+      "scene": "工位",
+      "action": "认真打字",
+      "camera": "中景"
+    },
+    {
+      "text": "饼可以听，但路要自己算清楚。",
+      "emotion": "calm",
+      "scene": "夜晚街头",
+      "action": "下班走路，平静",
+      "camera": "跟拍",
+      "highlight": true
+    },
+    {
+      "text": "把本事练在自己身上，谁也拿不走。",
+      "emotion": "happy",
+      "scene": "工位",
+      "action": "收拾包下班，开心",
+      "camera": "中景"
+    },
+    {
+      "text": "你的领导，给你画过什么饼？",
+      "emotion": "happy",
+      "scene": "镜头前",
+      "action": "歪头眨眼挥爪",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "饼可以听，路要自己算清楚。",
+  "tags": [
+    "画饼",
+    "领导",
+    "职场梗",
+    "英短",
+    "AI萌宠"
+  ]
+}

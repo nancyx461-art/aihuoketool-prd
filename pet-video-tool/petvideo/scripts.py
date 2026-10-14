@@ -54,9 +54,14 @@ FORMS = {
 
 
 def _load_history():
-    if HISTORY_FILE.exists():
-        return json.loads(HISTORY_FILE.read_text(encoding="utf-8"))
-    return []
+    """本地出片记录 + content/ 里已提交的剧本（云端定时任务每次都是全新环境，只能靠后者去重）。"""
+    history = json.loads(HISTORY_FILE.read_text(encoding="utf-8")) if HISTORY_FILE.exists() else []
+    seen = {h["title"] for h in history}
+    for path in sorted((ROOT / "content").glob("*.json")):
+        s = json.loads(path.read_text(encoding="utf-8"))
+        if s.get("title") and s["title"] not in seen:
+            history.append({"date": path.stem, "title": s["title"], "theme": s.get("theme")})
+    return sorted(history, key=lambda h: h.get("date", ""))
 
 
 def record_history(script):
@@ -81,7 +86,7 @@ def normalize(script, pet):
             "text": text,
             "emotion": emotion if emotion in EMOTIONS else "calm",
             "highlight": bool(line.get("highlight")),
-            **{k: str(line[k]).strip() for k in ("scene", "action", "camera") if line.get(k)},
+            **{k: str(line[k]).strip() for k in ("scene", "action", "camera", "shot") if line.get(k)},
         })
     if not lines:
         raise ValueError("脚本没有任何台词")
