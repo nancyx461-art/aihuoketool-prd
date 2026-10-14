@@ -42,6 +42,7 @@ jobs:
           LLM_API_KEY: ${{ secrets.LLM_API_KEY }}
           LLM_BASE_URL: ${{ vars.LLM_BASE_URL }}
           LLM_MODEL: ${{ vars.LLM_MODEL }}
+          ARK_API_KEY: ${{ secrets.ARK_API_KEY }}
         run: ./daily_ci.sh "${{ inputs.date }}"
 
       - name: 发布到 Releases
@@ -54,11 +55,11 @@ jobs:
           gh release create "$TAG" release/tuantuan-*.mp4 release/tuantuan-*-cover.jpg \
             --title "$DATE $(cat release/title.txt)" --notes-file release/notes.md --target "$GITHUB_SHA"
 
-      - name: 新写的剧本存回仓库（用于之后的选题去重）
-        if: steps.make.outputs.new_script == '1'
+      - name: 新剧本和新镜头存回仓库（用于之后的选题去重和镜头复用）
         run: |
+          git add content/ assets/library/
+          if git diff --cached --quiet; then exit 0; fi
           git config user.name "github-actions[bot]"
           git config user.email "41898699+github-actions[bot]@users.noreply.github.com"
-          git add content/
-          git commit -m "content: ${{ steps.make.outputs.date }} 每日剧本"
+          git commit -m "content: ${{ steps.make.outputs.date }} 每日剧本和新镜头"
           git push

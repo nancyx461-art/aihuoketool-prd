@@ -134,7 +134,10 @@ motion_clips:
 **推荐：GitHub 定时任务（已配好，`.github/workflows/daily-video.yml`）**。每天北京时间 8 点，GitHub 会自动出当天的视频，发到仓库的 **Releases** 页面。每天一条，里面有视频、封面、可直接复制的文案和话题，用手机浏览器或 GitHub App 就能下载。
 
 - 选题来源：`content/<日期>.json` 有排好的剧本就用排好的；没有的话，设置了 `LLM_API_KEY` 就由大模型现写，写好的剧本会自动存回 `content/`，用于之后去重。
-- 设置大模型：仓库 Settings → Secrets and variables → Actions，在 Secrets 里添加 `LLM_API_KEY`（比如 DeepSeek 的密钥）。如果用别家模型，再到 Variables 里添加 `LLM_BASE_URL` 和 `LLM_MODEL`。
+- 新场景：大模型写剧本时，会为当天的故事设计 1~2 个素材库里没有的场景；预先写好的剧本里匹配不到镜头的句子也算。任务会用火山方舟 Seedream，以 `assets/pet.png` 为参考图补拍这些镜头，存进 `assets/library/` 并提交回仓库，以后的视频也能复用。每条最多补拍几张由 `config.yaml` 的 `media.new_shots.max_per_video` 控制。
+- 设置密钥：仓库 Settings → Secrets and variables → Actions → New repository secret：
+  - `LLM_API_KEY`：写剧本用，比如 DeepSeek 的密钥。如果用别家模型，再到 Variables 里添加 `LLM_BASE_URL` 和 `LLM_MODEL`。
+  - `ARK_API_KEY`：补拍新镜头用，在火山方舟控制台创建 API Key，并开通 Seedream 4.0 模型。
 - 手动补跑：Actions → 团团每日视频 → Run workflow，可以指定日期。
 
 另一种方式是交给 Cursor 云端 Agent。它还能自己补拍新镜头，但需要在 Cursor 网页上手动创建自动化，提示词见 [`automation_prompt.md`](automation_prompt.md)。发布时间和文案见 `content/发布日历.md`。

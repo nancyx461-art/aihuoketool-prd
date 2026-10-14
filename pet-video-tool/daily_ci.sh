@@ -37,6 +37,9 @@ print("**台词**：\n\n" + "\n".join(f"{i}. {l['text']}" for i, l in enumerate(
 open("release/title.txt", "w", encoding="utf-8").write(s["title"])
 EOF
 
+if [ -s "$OUT/new_shots.txt" ]; then
+  { echo; echo "**今天补拍的新场景**（已存进素材库，以后会复用）："; echo; sed 's/^/- /' "$OUT/new_shots.txt"; } >> release/notes.md
+fi
+
 echo "date=$DATE" >> "${GITHUB_OUTPUT:-/dev/null}"
-echo "new_script=${NEW_SCRIPT:-0}" >> "${GITHUB_OUTPUT:-/dev/null}"
 echo "[完成] $OUT"
