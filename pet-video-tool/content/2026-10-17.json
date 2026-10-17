@@ -1,0 +1,71 @@
+{
+  "theme": "周末被工作消息打扰",
+  "title": "周末的工作群",
+  "lines": [
+    {
+      "text": "周六早上十点，我终于睡到了自然醒。",
+      "emotion": "happy",
+      "scene": "沙发",
+      "action": "躺平放松，抱着抱枕",
+      "camera": "中景"
+    },
+    {
+      "text": "刚躺上沙发，手机就开始震。",
+      "emotion": "shock",
+      "scene": "沙发周末",
+      "action": "盯着手机消息，吃惊",
+      "camera": "中景"
+    },
+    {
+      "text": "工作群里：大家周末辛苦一下。",
+      "emotion": "angry",
+      "scene": "沙发周末",
+      "action": "看手机消息，崩溃",
+      "camera": "中景"
+    },
+    {
+      "text": "那一刻，我感觉自己根本没下过班。",
+      "emotion": "sad",
+      "scene": "卧室床边",
+      "action": "坐在床边发呆，累",
+      "camera": "中景"
+    },
+    {
+      "text": "后来我想明白了，不紧急的消息可以周一再回。",
+      "emotion": "calm",
+      "scene": "厨房",
+      "action": "认真做饭",
+      "camera": "中景"
+    },
+    {
+      "text": "回复可以晚一点，但你的周末只有一次。",
+      "emotion": "calm",
+      "scene": "窗边夕阳",
+      "action": "看窗外，温柔",
+      "camera": "侧面近景",
+      "highlight": true
+    },
+    {
+      "text": "今天先把手机放下，好好吃顿饭。",
+      "emotion": "happy",
+      "scene": "沙发",
+      "action": "躺平放松，开心",
+      "camera": "中景"
+    },
+    {
+      "text": "你的周末，被工作群打扰过吗？",
+      "emotion": "happy",
+      "scene": "镜头前",
+      "action": "歪头眨眼挥爪",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "回复可以晚一点，周末只有一次。",
+  "tags": [
+    "周末",
+    "工作群",
+    "打工人",
+    "英短",
+    "AI萌宠"
+  ]
+}

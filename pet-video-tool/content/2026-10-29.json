@@ -1,0 +1,71 @@
+{
+  "theme": "被夸一句能开心一整天",
+  "title": "今天被领导夸了",
+  "lines": [
+    {
+      "text": "今天领导在群里说了一句：做得不错。",
+      "emotion": "shock",
+      "scene": "工位",
+      "action": "看屏幕吃惊",
+      "camera": "中景"
+    },
+    {
+      "text": "就这五个字，我开心了一整天。",
+      "emotion": "happy",
+      "scene": "工位",
+      "action": "被夸，害羞开心",
+      "camera": "面部特写"
+    },
+    {
+      "text": "连午饭都多吃了一碗。",
+      "emotion": "happy",
+      "scene": "茶水间",
+      "action": "摸鱼，偷吃饼干",
+      "camera": "中景"
+    },
+    {
+      "text": "原来打工人要的不多，一句认可就够了。",
+      "emotion": "calm",
+      "scene": "窗边夕阳",
+      "action": "看窗外，温柔",
+      "camera": "侧面近景"
+    },
+    {
+      "text": "所以我也去夸了夸隔壁的同事。",
+      "emotion": "happy",
+      "scene": "工位",
+      "action": "同事拍肩，温柔",
+      "camera": "中景"
+    },
+    {
+      "text": "别吝啬夸别人，也别忘了夸夸自己。",
+      "emotion": "calm",
+      "scene": "工位",
+      "action": "被夸，害羞开心",
+      "camera": "中景",
+      "highlight": true
+    },
+    {
+      "text": "今天的你，也做得很不错。",
+      "emotion": "happy",
+      "scene": "夜晚街头",
+      "action": "下班走路，平静",
+      "camera": "跟拍"
+    },
+    {
+      "text": "你最近一次被夸，是什么时候？",
+      "emotion": "happy",
+      "scene": "镜头前",
+      "action": "歪头眨眼挥爪",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "别吝啬夸别人，也别忘了夸夸自己。",
+  "tags": [
+    "被夸",
+    "职场",
+    "正能量",
+    "英短",
+    "治愈"
+  ]
+}

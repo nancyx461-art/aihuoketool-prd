@@ -1,0 +1,71 @@
+{
+  "theme": "工作中犯错后的自责",
+  "title": "我把报表发错群了",
+  "lines": [
+    {
+      "text": "今天我犯了个错，把报表发错了群。",
+      "emotion": "shock",
+      "scene": "工位",
+      "action": "看屏幕吃惊",
+      "camera": "中景"
+    },
+    {
+      "text": "撤回的时候，爪子都在抖。",
+      "emotion": "angry",
+      "scene": "工位",
+      "action": "捂脸崩溃",
+      "camera": "中景"
+    },
+    {
+      "text": "回家路上，我把这件事想了一百遍。",
+      "emotion": "sad",
+      "scene": "深夜地铁站",
+      "action": "回家，累",
+      "camera": "全景"
+    },
+    {
+      "text": "第二天，同事拍拍我：谁还没发错过群。",
+      "emotion": "calm",
+      "scene": "工位",
+      "action": "同事拍肩，温柔",
+      "camera": "中景"
+    },
+    {
+      "text": "原来你以为大家都在看你，其实大家都在忙自己。",
+      "emotion": "calm",
+      "scene": "工位",
+      "action": "喝咖啡，平静",
+      "camera": "中景"
+    },
+    {
+      "text": "认真对待工作，也要温柔对待自己。",
+      "emotion": "calm",
+      "scene": "窗边夕阳",
+      "action": "看窗外，温柔",
+      "camera": "侧面近景",
+      "highlight": true
+    },
+    {
+      "text": "错了就改，改完就翻篇，今晚好好睡一觉。",
+      "emotion": "happy",
+      "scene": "卧室闹钟",
+      "action": "缩在被子里",
+      "camera": "中景"
+    },
+    {
+      "text": "你上班犯过最尴尬的错是什么？",
+      "emotion": "happy",
+      "scene": "镜头前",
+      "action": "歪头眨眼挥爪",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "认真对待工作，温柔对待自己。",
+  "tags": [
+    "职场",
+    "犯错",
+    "内耗",
+    "英短",
+    "治愈"
+  ]
+}

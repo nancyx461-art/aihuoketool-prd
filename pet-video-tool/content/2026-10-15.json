@@ -1,0 +1,78 @@
+{
+  "theme": "工资到账五分钟就没了",
+  "title": "工资在我卡里待了五分钟",
+  "lines": [
+    {
+      "text": "十号上午十点，手机震了一下，工资到账了。",
+      "emotion": "shock",
+      "highlight": false,
+      "scene": "开放式办公室工位，电脑屏幕亮着",
+      "action": "盯着手机屏幕，眼睛一下子睁大，尾巴竖起来",
+      "camera": "手机和脸部特写，缓慢推近"
+    },
+    {
+      "text": "我在工位上偷偷开心了三秒。",
+      "emotion": "happy",
+      "highlight": false,
+      "scene": "工位，旁边同事只露出手臂在敲键盘",
+      "action": "双爪捧着手机贴在胸口，小幅度左右摇晃",
+      "camera": "中景固定"
+    },
+    {
+      "text": "第四秒，房租扣走了。",
+      "emotion": "sad",
+      "highlight": false,
+      "scene": "工位",
+      "action": "耳朵慢慢耷拉下来，看着手机叹气",
+      "camera": "面部特写"
+    },
+    {
+      "text": "第五秒，花呗也来打招呼了。",
+      "emotion": "angry",
+      "highlight": false,
+      "scene": "工位",
+      "action": "鼓起腮帮子，用爪子戳手机屏幕",
+      "camera": "手机特写切到脸"
+    },
+    {
+      "text": "最后剩下的钱，刚好够我买一杯奶茶。",
+      "emotion": "calm",
+      "highlight": false,
+      "scene": "写字楼楼下的奶茶店柜台",
+      "action": "踮脚把手机递给店员扫码，斜挎小包晃了一下",
+      "camera": "中景跟拍"
+    },
+    {
+      "text": "可我还是买了，因为这个月我真的很努力。",
+      "emotion": "happy",
+      "highlight": false,
+      "scene": "傍晚的街边，路灯刚亮",
+      "action": "双爪捧着奶茶，小口吸了一下，眯起眼睛",
+      "camera": "近景，背景虚化"
+    },
+    {
+      "text": "钱会花完，但犒劳自己的心意不能省。",
+      "emotion": "calm",
+      "highlight": true,
+      "scene": "傍晚的街边长椅",
+      "action": "坐在长椅上抱着奶茶看夕阳",
+      "camera": "全景，慢慢拉远"
+    },
+    {
+      "text": "你的工资，在卡里待了几分钟？",
+      "emotion": "happy",
+      "highlight": false,
+      "scene": "街边长椅",
+      "action": "转头看镜头，歪头眨眼",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "工资会花完，犒劳自己的心意不能省。",
+  "tags": [
+    "萌宠上班",
+    "发工资",
+    "打工人",
+    "AI萌宠",
+    "职场"
+  ]
+}

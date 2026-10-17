@@ -1,0 +1,71 @@
+{
+  "theme": "带薪摸鱼的艺术",
+  "title": "周五下午的团团",
+  "lines": [
+    {
+      "text": "周五下午三点，是打工人最强的时刻。",
+      "emotion": "calm",
+      "scene": "工位",
+      "action": "喝咖啡，悠闲",
+      "camera": "中景"
+    },
+    {
+      "text": "身体在工位，心已经在周末了。",
+      "emotion": "calm",
+      "scene": "窗边夕阳",
+      "action": "看窗外发呆",
+      "camera": "中景"
+    },
+    {
+      "text": "我借口去茶水间，偷偷吃了一块饼干。",
+      "emotion": "happy",
+      "scene": "茶水间",
+      "action": "摸鱼，躲在冰箱旁偷吃饼干",
+      "camera": "中景"
+    },
+    {
+      "text": "回来的时候，领导正好路过。",
+      "emotion": "shock",
+      "scene": "工位",
+      "action": "看屏幕，吃惊僵住",
+      "camera": "中景"
+    },
+    {
+      "text": "我立刻打开表格，假装很认真。",
+      "emotion": "calm",
+      "scene": "工位",
+      "action": "认真打字",
+      "camera": "中景"
+    },
+    {
+      "text": "其实休息不是偷懒，是为了走更远的路。",
+      "emotion": "calm",
+      "scene": "窗边夕阳",
+      "action": "看窗外，温柔",
+      "camera": "侧面近景",
+      "highlight": true
+    },
+    {
+      "text": "这周你已经很棒了，今晚好好犒劳自己。",
+      "emotion": "happy",
+      "scene": "工位",
+      "action": "收拾包准备下班，开心",
+      "camera": "中景"
+    },
+    {
+      "text": "周五快乐，你今天摸鱼了吗？",
+      "emotion": "happy",
+      "scene": "镜头前",
+      "action": "歪头眨眼挥爪",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "休息不是偷懒，是为了走更远的路。",
+  "tags": [
+    "周五",
+    "摸鱼",
+    "打工人",
+    "英短",
+    "AI萌宠"
+  ]
+}

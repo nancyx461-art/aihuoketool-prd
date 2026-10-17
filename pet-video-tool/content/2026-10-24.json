@@ -1,0 +1,72 @@
+{
+  "theme": "周末不学习就焦虑",
+  "title": "周末想学习的团团",
+  "lines": [
+    {
+      "text": "周六早上，我决定做一个自律的打工人。",
+      "emotion": "happy",
+      "scene": "沙发",
+      "action": "躺平放松，抱着抱枕",
+      "camera": "中景"
+    },
+    {
+      "text": "看了三页书，眼皮开始打架。",
+      "emotion": "sad",
+      "scene": "书桌",
+      "action": "看书犯困，累",
+      "camera": "面部特写",
+      "shot": "书桌_看书_犯困_累"
+    },
+    {
+      "text": "刷到别人周末考证、健身、学英语。",
+      "emotion": "shock",
+      "scene": "沙发周末",
+      "action": "盯着手机消息，吃惊",
+      "camera": "中景"
+    },
+    {
+      "text": "我躺在沙发上，觉得自己好失败。",
+      "emotion": "sad",
+      "scene": "卧室床边",
+      "action": "发呆，难过",
+      "camera": "中景"
+    },
+    {
+      "text": "后来想通了，这一周我已经很努力了。",
+      "emotion": "calm",
+      "scene": "厨房",
+      "action": "做饭，认真",
+      "camera": "中景"
+    },
+    {
+      "text": "休息也是成长的一部分，不用跟谁比。",
+      "emotion": "calm",
+      "scene": "沙发",
+      "action": "躺平放松，抱着抱枕",
+      "camera": "中景",
+      "highlight": true
+    },
+    {
+      "text": "今天的任务只有一个：把自己充满电。",
+      "emotion": "happy",
+      "scene": "长椅",
+      "action": "喝奶茶，温柔",
+      "camera": "中景"
+    },
+    {
+      "text": "你的周末，是在学习还是在充电？",
+      "emotion": "happy",
+      "scene": "镜头前",
+      "action": "歪头眨眼挥爪",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "休息也是成长的一部分，不用跟谁比。",
+  "tags": [
+    "周末",
+    "自律",
+    "内卷",
+    "英短",
+    "AI萌宠"
+  ]
+}

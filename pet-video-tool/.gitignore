@@ -1,0 +1,5 @@
+output/
+assets/demo_pet.png
+__pycache__/
+assets/bgm_cute.wav
+release/

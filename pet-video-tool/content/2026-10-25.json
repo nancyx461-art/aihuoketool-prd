@@ -1,0 +1,71 @@
+{
+  "theme": "一个人在大城市打工",
+  "title": "一个人吃晚饭",
+  "lines": [
+    {
+      "text": "周日晚上，我给自己煮了一碗面。",
+      "emotion": "calm",
+      "scene": "厨房",
+      "action": "做饭，认真",
+      "camera": "中景"
+    },
+    {
+      "text": "一个人在这座城市，已经第三年了。",
+      "emotion": "sad",
+      "scene": "窗边夕阳",
+      "action": "看窗外，想事情",
+      "camera": "侧面近景"
+    },
+    {
+      "text": "生病了自己去医院，搬家了自己扛箱子。",
+      "emotion": "sad",
+      "scene": "深夜地铁站",
+      "action": "回家，累",
+      "camera": "全景"
+    },
+    {
+      "text": "有时候也会想，这么拼到底为了什么。",
+      "emotion": "sad",
+      "scene": "卧室深夜",
+      "action": "睡不着，盯着天花板",
+      "camera": "中景"
+    },
+    {
+      "text": "可是面煮好的那一刻，我又觉得挺好。",
+      "emotion": "happy",
+      "scene": "餐桌",
+      "action": "一个人吃饭，温柔",
+      "camera": "中景"
+    },
+    {
+      "text": "一个人也要好好吃饭，这就是在好好爱自己。",
+      "emotion": "calm",
+      "scene": "餐桌",
+      "action": "一个人吃饭，温柔",
+      "camera": "中景",
+      "highlight": true
+    },
+    {
+      "text": "在外打拼的你，今晚也吃点热乎的吧。",
+      "emotion": "happy",
+      "scene": "长椅",
+      "action": "喝奶茶，温柔",
+      "camera": "中景"
+    },
+    {
+      "text": "你一个人在外地多久了？",
+      "emotion": "happy",
+      "scene": "镜头前",
+      "action": "歪头眨眼挥爪",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "一个人也要好好吃饭，这就是在好好爱自己。",
+  "tags": [
+    "独居",
+    "北漂",
+    "打工人",
+    "英短",
+    "治愈"
+  ]
+}

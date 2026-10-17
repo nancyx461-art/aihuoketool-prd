@@ -1,0 +1,71 @@
+{
+  "theme": "想辞职又不敢辞职",
+  "title": "辞职信写了三遍",
+  "lines": [
+    {
+      "text": "这个月，我的辞职信写了三遍。",
+      "emotion": "sad",
+      "scene": "工位",
+      "action": "写辞职信，纠结",
+      "camera": "中景"
+    },
+    {
+      "text": "每次写到一半，就想起下个月的房租。",
+      "emotion": "sad",
+      "scene": "工位",
+      "action": "趴桌，累",
+      "camera": "中景"
+    },
+    {
+      "text": "然后默默删掉，继续打开表格。",
+      "emotion": "calm",
+      "scene": "工位",
+      "action": "认真打字",
+      "camera": "中景"
+    },
+    {
+      "text": "我问自己：我是不敢走，还是还没准备好？",
+      "emotion": "calm",
+      "scene": "窗边夕阳",
+      "action": "看窗外",
+      "camera": "中景"
+    },
+    {
+      "text": "后来我决定，先把本事一点点装进包里。",
+      "emotion": "happy",
+      "scene": "工位",
+      "action": "收拾包下班，开心",
+      "camera": "中景"
+    },
+    {
+      "text": "想走不丢人，准备好了再走，才是真的勇敢。",
+      "emotion": "calm",
+      "scene": "夜晚街头",
+      "action": "下班走路，平静",
+      "camera": "跟拍",
+      "highlight": true
+    },
+    {
+      "text": "不管留下还是离开，你都值得更好的生活。",
+      "emotion": "happy",
+      "scene": "长椅",
+      "action": "喝奶茶，温柔",
+      "camera": "中景"
+    },
+    {
+      "text": "你写过几次辞职信？",
+      "emotion": "happy",
+      "scene": "镜头前",
+      "action": "歪头眨眼挥爪",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "想走不丢人，准备好了再走，才是真的勇敢。",
+  "tags": [
+    "辞职",
+    "打工人",
+    "职场成长",
+    "英短",
+    "AI萌宠"
+  ]
+}

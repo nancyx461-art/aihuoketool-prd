@@ -1,0 +1,71 @@
+{
+  "theme": "周日晚上的上班焦虑",
+  "title": "周日晚上睡不着",
+  "lines": [
+    {
+      "text": "周日晚上十一点，我又睡不着了。",
+      "emotion": "sad",
+      "scene": "卧室深夜",
+      "action": "睡不着，焦虑地盯着天花板",
+      "camera": "俯拍特写"
+    },
+    {
+      "text": "脑子里自动播放：明天的会、没写完的周报。",
+      "emotion": "angry",
+      "scene": "卧室深夜",
+      "action": "睡不着，焦虑",
+      "camera": "中景"
+    },
+    {
+      "text": "明明还没上班，人已经累了。",
+      "emotion": "sad",
+      "scene": "卧室床边",
+      "action": "发呆，很累",
+      "camera": "中景"
+    },
+    {
+      "text": "后来我发现，让我焦虑的是想象中的周一。",
+      "emotion": "calm",
+      "scene": "厨房",
+      "action": "做饭，认真",
+      "camera": "中景"
+    },
+    {
+      "text": "真到了周一，事情一件件做，也就过去了。",
+      "emotion": "calm",
+      "scene": "工位",
+      "action": "认真打字",
+      "camera": "中景"
+    },
+    {
+      "text": "别用想象中的困难，提前消耗今天的自己。",
+      "emotion": "calm",
+      "scene": "窗边夕阳",
+      "action": "看窗外，温柔",
+      "camera": "侧面近景",
+      "highlight": true
+    },
+    {
+      "text": "现在，把手机放下，闭上眼睛。",
+      "emotion": "calm",
+      "scene": "卧室闹钟",
+      "action": "缩在被子里",
+      "camera": "中景"
+    },
+    {
+      "text": "晚安，明天的事明天的团团会搞定。",
+      "emotion": "happy",
+      "scene": "镜头前",
+      "action": "歪头眨眼挥爪",
+      "camera": "面部特写"
+    }
+  ],
+  "caption": "别用想象中的困难，提前消耗今天的自己。",
+  "tags": [
+    "周日",
+    "上班焦虑",
+    "失眠",
+    "英短",
+    "治愈"
+  ]
+}

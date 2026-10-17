@@ -1,0 +1,123 @@
+# 视频形式：
+#   story   剧情 vlog（对标「小斗下班啦」）：宠物像人一样上班生活，每句旁白一个分镜，画面跟着故事换场景
+#   talking 口播：同一张 IP 图全程对镜头说话（张嘴、眨眼、按情绪做动作）
+mode: story
+
+# ============ 宠物 IP 设定 ============
+pet:
+  name: 团团
+  species: 英短蓝猫
+  # 人设会写进提示词，决定脚本语气
+  # 完整人设见 团团人设.md
+  persona: >-
+    一只和你一样不想上班、但还是好好上班的猫。25 岁（猫龄 2 岁），在互联网公司做运营第三年，
+    写周报、做表格、回群消息什么都干；工位正对空调出风口；一个人住老小区，地铁通勤 40 分钟；
+    工资 15 号到账，交完房租就没了，靠楼下三分糖奶茶续命。
+    性格：表面乖巧秒回"收到"，心里小剧场很多；认真、心软、能自己把自己哄好；不卷也不摆烂。
+    说话：短句口语，自嘲多过抱怨，爱在括号里小声吐槽（如"收到～（并没有）"）；讲道理只讲自己踩过的坑，
+    用"后来我发现"，不说"你应该"；安慰人先承认情绪，再给一个很小、做得到的办法。
+    常出场的人（不露脸）：爱画饼、爱开会的王总；隔壁工位的搭子阿杰（会拍拍团团的头、递零食）；
+    改了八版需求的产品经理小林；每周日打视频问"吃饭没"的妈妈。
+    不做：骂具体公司或品牌、阴阳怪气、贩卖焦虑、劝人辞职或躺平、堆砌鸡汤。
+  catchphrase: 喵的，今天也辛苦了。
+  # 固定外形描述：会写进每个分镜的提示词，保证每个镜头里都是同一只宠物
+  appearance: 一只英短蓝猫幼猫，蓝灰色丝绒短毛，大圆脸、肉嘟嘟的腮帮子，铜橙色圆眼睛，小圆耳朵，短短的腿，像人一样直立，脖子上挂着蓝色工牌挂绳，背一个米色帆布斜挎包
+  # 你的宠物 IP 图片（建议竖图、背景干净、宠物正脸）。
+  # 留空或文件不存在时，会自动生成一张示例橘猫图用来跑通流程。
+  image: assets/pet.png
+  # 可选：多张不同角度的 IP 图（正面/侧面/全身），剧情模式生成分镜时一起作为参考图，形象更稳定
+  reference_images: []
+
+  # 可选：嘴巴和眼睛在图片中的位置（相对比例 0~1：中心x, 中心y, 宽, 高）。
+  # 配置后宠物会"张嘴说话"和"眨眼"；不配置也能动（呼吸、点头、弹跳、摇摆）。
+  # 运行 `python make_video.py --mark` 可以输出一张带网格的图帮你量坐标。
+  mouth: null        # 例如 [0.50, 0.62, 0.16, 0.06]
+  eyes: []           # 例如 [[0.40, 0.48, 0.09, 0.06], [0.60, 0.48, 0.09, 0.06]]
+  mouth_color: "#3a1f1f"
+
+  # 可选：用即梦/可灵/Runway 等"图生视频"工具，提前把 IP 做成几段动作循环视频，
+  # 之后每天的视频都会复用这些片段，动作会比本地动画自然很多。
+  # 键是情绪（calm/happy/sad/shock/angry），值是视频路径，至少给一个 calm。
+  motion_clips: {}
+  # motion_clips:
+  #   calm: assets/clips/calm.mp4
+  #   happy: assets/clips/happy.mp4
+
+# ============ 脚本生成（大模型） ============
+# 兼容 OpenAI 接口的任意模型：DeepSeek / 豆包(火山方舟) / Kimi / 通义 / OpenAI。
+# 密钥只从环境变量读取：LLM_API_KEY（必填）、LLM_BASE_URL、LLM_MODEL（可覆盖下面的默认值）。
+# 没有配置密钥时，会从内置的职场选题库里按日期轮换脚本，保证每天都有产出。
+llm:
+  base_url: https://api.deepseek.com
+  model: deepseek-chat
+  temperature: 1.0
+  # 想让它围绕的方向，每天随机挑一个；也可以用 --topic 临时指定
+  themes:
+    - 周一上班的精神状态
+    - 领导画饼和打工人的清醒
+    - 下班前五分钟来的需求
+    - 微信"收到"背后的千言万语
+    - 改了八版又回到第一版的方案
+    - 开不完的会
+    - 同事抢功、背锅
+    - 年终总结和绩效焦虑
+    - 想辞职又不敢辞职
+    - 带薪摸鱼的艺术
+    - 被说"年轻人要多吃苦"
+    - 工作中犯错后的自责
+    - 加班到深夜的地铁
+    - 周末被工作消息打扰
+    - 工资到账五分钟就没了
+
+# ============ 剧情模式：分镜素材 ============
+# 每个镜头的素材按这个顺序找：
+#   1. 当天输出目录 shots/ 里你自己放的 shot_01.mp4 / shot_02.png ……（可以用 shots.md 里的提示词去即梦/可灵生成）
+#   2. 素材库 library 里按文件名标签匹配的现成镜头（一次做好、每天复用，最省钱）
+#   3. provider: ark 时，调用火山方舟 Seedance，用 IP 参考图 + 分镜提示词自动生成视频（需要环境变量 ARK_API_KEY）
+#   4. 都没有时，用本地宠物动画兜底（保证流程能跑完）
+media:
+  library: assets/library # 素材库目录，文件名即标签：工位_打字_认真.mp4、电梯_按按钮_平静.png
+  provider: none          # none / ark
+  max_generated_per_video: null       # 每条视频最多自动生成几个镜头（优先开头钩子和金句），null 不限
+  model: doubao-seedance-2-0-260128   # 也可用环境变量 ARK_VIDEO_MODEL 覆盖
+  image_role: reference_image         # 模型不支持参考图时改成 first_frame（以 IP 图作为首帧）
+  resolution: 720p
+  duration: 5
+  concurrency: 3
+  style: null             # 留空用默认画风：写实、电影感自然光、温暖治愈、人类不露脸、无文字
+  new_shots:              # 每天按剧本设计新场景，用火山方舟 Seedream 以 IP 图为参考补拍，存进素材库长期复用
+    enabled: true         # 需要环境变量 ARK_API_KEY；没有就只用素材库现有镜头
+    max_per_video: 2      # 每条视频最多补拍几张（每张约 0.2 元）
+    model: doubao-seedream-4-0-250828   # 也可用环境变量 ARK_IMAGE_MODEL 覆盖
+    size: 1440x2560
+
+# ============ 配音 ============
+tts:
+  engine: gtts          # 已发布的视频都是 gtts 的声音，保持一致；edge（微软，免费） / gtts（谷歌，免费） / espeak（离线兜底，机械音）；连不上会依次降级
+  voice: zh-CN-XiaoyiNeural   # 活泼女声；也可试 zh-CN-YunxiNeural（少年感男声）
+  rate: "+8%"
+  pitch: "+12Hz"
+  gap: 0.22             # 句与句之间停顿（秒）
+  gtts_speed: 1.25      # gTTS 语速倍数
+  gtts_pitch: 1.1       # gTTS 音调倍数（>1 更萌）
+
+# ============ 画面 ============
+video:
+  width: 1080
+  height: 1920
+  fps: 30
+  background: blur      # blur（用宠物图模糊做背景） / 纯色如 "#f6e7d0"
+  show_title: true
+  subtitle_font: null   # 留空自动找系统中文字体，也可填 .ttf/.ttc 路径
+  bgm: auto             # auto=程序合成的轻快小调（无版权）；也可填你自己的音乐路径；null=不加
+  bgm_volume: 0.25
+
+# ============ 输出 ============
+output_dir: output
+jianying:
+  enabled: true
+  # 剪映草稿目录，留空自动查找：
+  #   Windows: C:/Users/<你>/AppData/Local/JianyingPro/User Data/Projects/com.lveditor.draft
+  #   macOS:   ~/Movies/JianyingPro/User Data/Projects/com.lveditor.draft
+  # 找不到时草稿会放在当天的输出文件夹里。
+  draft_folder: null
