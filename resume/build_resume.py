@@ -306,6 +306,10 @@ def build():
 
     header_block(doc)
 
+    section_title(doc, "教育背景")
+    for item in EDUCATION:
+        entry(doc, item)
+
     section_title(doc, "核心优势")
     for lead, text in STRENGTHS:
         bullet(doc, text, lead=lead)
@@ -320,10 +324,6 @@ def build():
     section_title(doc, "科研课题与论文")
     for text in RESEARCH:
         bullet(doc, text, size=SMALL_PT + 0.5)
-
-    section_title(doc, "教育背景")
-    for item in EDUCATION:
-        entry(doc, item)
 
     section_title(doc, "技能与语言")
     for lead, text in SKILLS:
