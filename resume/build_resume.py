@@ -55,7 +55,8 @@ STRENGTHS = [
     ),
     (
         "数字化与 AI 营销视角：",
-        "研究方向为数字营销、AI 营销、医药营销，持续跟踪医疗大健康行业数字化转型、组织协同与营销技术趋势，"
+        "研究方向为数字营销、AI 营销、医药营销，持续跟踪医疗大健康行业数字化转型、组织协同与营销技术趋势；"
+        "本人是 Claude、Codex、Cursor、WorkBuddy 等 AI 工具的深度使用者，熟悉 AI Agent 在研究、方案与办公场景中的实际价值，"
         "能够把协同办公 / SaaS / AI 产品价值与制药、器械、医疗机构客户的业务场景结合，输出行业解决方案思路。",
     ),
     (
@@ -123,7 +124,7 @@ EXPERIENCE = [
         "place": "广州",
         "bullets": [
             "对接多位市场部、销售部经理，汇总区域销量、学术活动、临床专家反馈、竞品动态等数据，输出销售月报与分析 PPT，为区域市场策略制定提供支持。",
-            "协助区域市场活动项目的策划、组织与落地，系统学习药企市场推广与客户管理方法。",
+            "协助区域市场活动项目的策划、组织与落地。",
         ],
     },
 ]
@@ -170,8 +171,10 @@ EDUCATION = [
 ]
 
 SKILLS = [
+    ("AI 工具：", "熟练使用 Claude、OpenAI Codex、Cursor、WorkBuddy 等 AI 助手与 Agent 工具，"
+     "日常用于行业研究与客户洞察、销售方案与行业解决方案撰写、数据分析及办公自动化提效；持续关注 AI 在企业服务场景的落地方式。"),
     ("办公与分析工具：", "Word / PowerPoint（熟练）、Excel（数据透视表、常用函数）、SPSS、AMOS、Xmind。"),
-    ("语言：", "英语（CET-6、BEC 中级）、粤语（良好）、普通话。"),
+    ("语言：", "英语（CET-6、BEC 中级）、粤语（良好）。"),
 ]
 
 # --------------------------------------------------------------------------
@@ -297,7 +300,7 @@ def build():
     section.page_height = Cm(29.7)
     section.left_margin = section.right_margin = Cm(1.7)
     section.top_margin = Cm(1.4)
-    section.bottom_margin = Cm(1.3)
+    section.bottom_margin = Cm(1.2)
 
     normal = doc.styles["Normal"]
     normal.font.name = LATIN_FONT
